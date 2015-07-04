@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Created by fordok on 7/4/2015.
  */
-@Path("/")
+@Path("/status")
 public class StatusResource {
 
     @GET
