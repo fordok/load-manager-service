@@ -31,6 +31,10 @@ public class ManagerResource {
             loadGenerator.start();
         } else if (action.equals("stop")) {
             loadGenerator.stop();
+        } else if (action.equals("suspend")) {
+            loadGenerator.suspend();
+        } else if (action.equals("resume")) {
+            loadGenerator.resume();
         }
         return new Status("OK", new Date());
     }
