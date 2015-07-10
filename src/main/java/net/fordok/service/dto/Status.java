@@ -1,6 +1,7 @@
 package net.fordok.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 
@@ -9,9 +10,9 @@ import java.util.Date;
  */
 public class Status {
     private String status;
-    private Date ts;
+    private String ts;
 
-    public Status(String status, Date ts) {
+    public Status(String status, String ts) {
         this.status = status;
         this.ts = ts;
     }
@@ -25,12 +26,20 @@ public class Status {
     }
 
     @JsonProperty
-    public Date getTs() {
+    public String getTs() {
         return ts;
     }
 
     @JsonProperty
-    public void setTs(Date ts) {
+    public void setTs(String ts) {
         this.ts = ts;
+    }
+
+    @Override
+    public String toString() {
+        return "Status{" +
+                "status='" + status + '\'' +
+                ", ts='" + ts + '\'' +
+                '}';
     }
 }
