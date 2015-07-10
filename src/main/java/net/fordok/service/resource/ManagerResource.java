@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import net.fordok.core.LoadGenerator;
 import net.fordok.service.dto.Status;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -39,6 +40,6 @@ public class ManagerResource {
         } else if (action.equals("resume")) {
             loadGenerator.resume();
         }
-        return new Status("OK", formatter.print(new DateTime()));
+        return new Status("OK", formatter.print(new DateTime().withZone(DateTimeZone.UTC)));
     }
 }

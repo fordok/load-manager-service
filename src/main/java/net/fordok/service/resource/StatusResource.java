@@ -3,6 +3,7 @@ package net.fordok.service.resource;
 import com.codahale.metrics.annotation.Timed;
 import net.fordok.service.dto.Status;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -23,6 +24,6 @@ public class StatusResource {
     @Produces(value = MediaType.APPLICATION_JSON)
     @Timed
     public Status getStatus() {
-        return new Status("OK", formatter.print(new DateTime()));
+        return new Status("OK", formatter.print(new DateTime().withZone(DateTimeZone.UTC)));
     }
 }

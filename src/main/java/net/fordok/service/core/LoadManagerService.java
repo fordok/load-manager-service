@@ -1,6 +1,8 @@
 package net.fordok.service.core;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -36,5 +38,7 @@ public class LoadManagerService extends Application<ServiceConfiguration> {
         environment.jersey().register(statusResource);
         final ManagerResource managerResource = new ManagerResource(loadGenerator);
         environment.jersey().register(managerResource);
+        ObjectMapper mapper = environment.getObjectMapper();;
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 }
