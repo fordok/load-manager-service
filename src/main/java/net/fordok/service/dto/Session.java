@@ -11,11 +11,15 @@ public class Session {
     private String name;
     private String status;
     private List<Task> tasks;
-    private Date start_ts;
-    private Date end_ts;
+    private Date startTs;
+    private Date endTs;
     private Result result;
 
     public Session() {
+    }
+
+    public Session(String name) {
+        this.name = name;
     }
 
     public String getSessionId() {
@@ -50,20 +54,20 @@ public class Session {
         this.tasks = tasks;
     }
 
-    public Date getStart_ts() {
-        return start_ts;
+    public Date getStartTs() {
+        return startTs;
     }
 
-    public void setStart_ts(Date start_ts) {
-        this.start_ts = start_ts;
+    public void setStartTs(Date startTs) {
+        this.startTs = startTs;
     }
 
-    public Date getEnd_ts() {
-        return end_ts;
+    public Date getEndTs() {
+        return endTs;
     }
 
-    public void setEnd_ts(Date end_ts) {
-        this.end_ts = end_ts;
+    public void setEndTs(Date endTs) {
+        this.endTs = endTs;
     }
 
     public Result getResult() {
