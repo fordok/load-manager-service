@@ -1,6 +1,7 @@
 package net.fordok.service.storage;
 
 import net.fordok.service.dto.Session;
+import net.fordok.service.dto.Task;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface Storage {
     List<Session> getSessions();
     Session getSessionById(String sessionId);
     Session saveSession(Session session);
+    List<Task> getTasksBySessionId(String sessionId);
+    Task getTaskById();
 }

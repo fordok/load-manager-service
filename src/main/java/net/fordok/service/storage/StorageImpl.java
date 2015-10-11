@@ -1,6 +1,7 @@
 package net.fordok.service.storage;
 
 import net.fordok.service.dto.Session;
+import net.fordok.service.dto.Task;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,5 +46,10 @@ public class StorageImpl implements Storage {
     public Session saveSession(Session session) {
         sessions.add(session);
         return session;
+    }
+
+    @Override
+    public List<Task> getTasksBySessionId(String sessionId) {
+        return getSessionById(sessionId).getTasks();
     }
 }

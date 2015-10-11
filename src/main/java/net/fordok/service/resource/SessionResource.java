@@ -2,6 +2,7 @@ package net.fordok.service.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import net.fordok.service.dto.Session;
+import net.fordok.service.dto.Task;
 import net.fordok.service.storage.Storage;
 
 import javax.ws.rs.*;
@@ -42,5 +43,17 @@ public class SessionResource {
         session.setStartTs(new Date());
         session.setStatus("Active");
         return storage.saveSession(session);
+    }
+
+    @GET
+    @Path("/{sessionId}/tasks")
+    public List<Task> getTasksBySessionId(@PathParam("sessionId") String sessionId) {
+        return storage.getTasksBySessionId(sessionId);
+    }
+
+    @GET
+    @Path("/{sessionId}/tasks/{taskId}")
+    public Session getTaskByIdAndSessionId(@PathParam("sessionId") String sessionId, @PathParam("taskId") String taskId) {
+        return storage.getSessionById(sessionId);
     }
 }
