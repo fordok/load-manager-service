@@ -13,6 +13,7 @@ import net.fordok.service.configuration.ServiceConfiguration;
 import net.fordok.service.resource.ManagerResource;
 import net.fordok.service.resource.SessionResource;
 import net.fordok.service.resource.StatusResource;
+import net.fordok.service.resource.TaskResource;
 import net.fordok.service.storage.Storage;
 import net.fordok.service.storage.StorageImpl;
 import net.fordok.work.HttpWork;
@@ -45,6 +46,8 @@ public class LoadManagerService extends Application<ServiceConfiguration> {
         environment.jersey().register(managerResource);
         final SessionResource sessionResource = new SessionResource(storage);
         environment.jersey().register(sessionResource);
+        final TaskResource taskResource = new TaskResource(storage);
+        environment.jersey().register(taskResource);
         ObjectMapper mapper = environment.getObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }

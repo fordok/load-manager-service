@@ -12,6 +12,9 @@ public interface Storage {
     List<Session> getSessions();
     Session getSessionById(String sessionId);
     Session saveSession(Session session);
+    List<Task> getTasks();
     List<Task> getTasksBySessionId(String sessionId);
-    Task getTaskById();
+    Task getTaskById(String taskId);
+    Task addTaskForSessionId(String sessionId, Task task);
+    Task saveTask(Task task);
 }

@@ -2,6 +2,7 @@ package net.fordok.service.storage;
 
 import net.fordok.service.dto.Session;
 import net.fordok.service.dto.Task;
+import net.fordok.service.dto.TaskType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.UUID;
  */
 public class StorageImpl implements Storage {
     private static List<Session> sessions = new ArrayList<Session>();
+    private static List<Task> tasks = new ArrayList<Task>();
 
     public StorageImpl() {
         Session session1 = new Session("session1");
@@ -25,6 +27,22 @@ public class StorageImpl implements Storage {
         session2.setStatus("Finished");
         sessions.add(session1);
         sessions.add(session2);
+
+        TaskType taskType = new TaskType();
+        taskType.setName("HttpWork");
+        taskType.setTaskTypeId(UUID.randomUUID().toString());
+
+        Task task1 = new Task("test1");
+        task1.setTaskId(UUID.randomUUID().toString());
+        task1.setStartTs(new Date());
+        task1.setStopTs(new Date());
+        task1.setStatus("Finished");
+        task1.setInitialCount(100);
+        task1.setTotalCount(100);
+        task1.setPeriod(1000);
+        task1.setTaskType(taskType);
+        tasks.add(task1);
+
     }
 
     @Override
@@ -49,7 +67,39 @@ public class StorageImpl implements Storage {
     }
 
     @Override
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    @Override
     public List<Task> getTasksBySessionId(String sessionId) {
         return getSessionById(sessionId).getTasks();
+    }
+
+    @Override
+    public Task getTaskById(String taskId) {
+        for (Task task : tasks) {
+            if (task.getTaskId().equals(taskId)) {
+                return task;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Task addTaskForSessionId(String sessionId, Task task) {
+        for (Session session : sessions) {
+            if (session.getSessionId().equals(sessionId)) {
+                session.getTasks().add(task);
+                return task;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Task saveTask(Task task) {
+        tasks.add(task);
+        return task;
     }
 }

@@ -53,7 +53,16 @@ public class SessionResource {
 
     @GET
     @Path("/{sessionId}/tasks/{taskId}")
-    public Session getTaskByIdAndSessionId(@PathParam("sessionId") String sessionId, @PathParam("taskId") String taskId) {
-        return storage.getSessionById(sessionId);
+    public Task getTaskBySessionIdAndId(@PathParam("sessionId") String sessionId, @PathParam("taskId") String taskId) {
+        return storage.getTaskById(taskId);
+    }
+
+    @POST
+    @Path("/{sessionId}/tasks")
+    public Task addTaskForSession(@PathParam("sessionId") String sessionId, Task task) {
+        task.setTaskId(UUID.randomUUID().toString());
+        task.setStartTs(new Date());
+        task.setStatus("Active");
+        return storage.addTaskForSessionId(sessionId, task);
     }
 }
