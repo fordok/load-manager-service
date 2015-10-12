@@ -4,10 +4,7 @@ import net.fordok.service.dto.Session;
 import net.fordok.service.dto.Task;
 import net.fordok.service.dto.TaskType;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by fordok on 10/8/2015.
@@ -31,6 +28,11 @@ public class StorageImpl implements Storage {
         TaskType taskType = new TaskType();
         taskType.setName("HttpWork");
         taskType.setTaskTypeId(UUID.randomUUID().toString());
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("url", "http://google.com");
+        params.put("method", "GET");
+        taskType.setParams(params);
 
         Task task1 = new Task("test1");
         task1.setTaskId(UUID.randomUUID().toString());
