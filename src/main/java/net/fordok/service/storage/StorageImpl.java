@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class StorageImpl implements Storage {
     private static List<Session> sessions = new ArrayList<Session>();
-    private static List<Task> tasks = new ArrayList<Task>();
+    private static Map<String,Task> tasks = new HashMap<String,Task>();
 
     public StorageImpl() {
         Session session1 = new Session("session1");
@@ -46,7 +46,7 @@ public class StorageImpl implements Storage {
         params.put("url", "http://google.com");
         params.put("method", "GET");
         task1.setParams(params);
-        tasks.add(task1);
+        tasks.put(task1.getTaskId(), task1);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class StorageImpl implements Storage {
 
     @Override
     public List<Task> getTasks() {
-        return tasks;
+        return new ArrayList<Task>(tasks.values());
     }
 
     @Override
@@ -82,12 +82,7 @@ public class StorageImpl implements Storage {
 
     @Override
     public Task getTaskById(String taskId) {
-        for (Task task : tasks) {
-            if (task.getTaskId().equals(taskId)) {
-                return task;
-            }
-        }
-        return null;
+        return tasks.get(taskId);
     }
 
     @Override
@@ -103,7 +98,7 @@ public class StorageImpl implements Storage {
 
     @Override
     public Task saveTask(Task task) {
-        tasks.add(task);
+        tasks.put(task.getTaskId(), task);
         return task;
     }
 }
