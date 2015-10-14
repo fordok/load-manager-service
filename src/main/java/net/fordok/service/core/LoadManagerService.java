@@ -46,7 +46,7 @@ public class LoadManagerService extends Application<ServiceConfiguration> {
         environment.jersey().register(managerResource);
         final SessionResource sessionResource = new SessionResource(storage);
         environment.jersey().register(sessionResource);
-        final TaskResource taskResource = new TaskResource(storage);
+        final TaskResource taskResource = new TaskResource(storage, loadGenerator);
         environment.jersey().register(taskResource);
         ObjectMapper mapper = environment.getObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);

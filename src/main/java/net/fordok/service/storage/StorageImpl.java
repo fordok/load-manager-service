@@ -26,25 +26,27 @@ public class StorageImpl implements Storage {
         sessions.add(session2);
 
         TaskType taskType = new TaskType();
-        taskType.setName("HttpWork");
+        taskType.setName("Http");
         taskType.setTaskTypeId(UUID.randomUUID().toString());
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("url", "http://google.com");
-        params.put("method", "GET");
-        taskType.setParams(params);
+        List<String> inputParams = new ArrayList<String>();
+        inputParams.add("url");
+        inputParams.add("method");
+        taskType.setInputParams(inputParams);
 
         Task task1 = new Task("test1");
         task1.setTaskId(UUID.randomUUID().toString());
         task1.setStartTs(new Date());
         task1.setStopTs(new Date());
         task1.setStatus("Finished");
-        task1.setInitialCount(100);
-        task1.setTotalCount(100);
+        task1.setInitialCount(10);
+        task1.setTotalCount(10);
         task1.setPeriod(1000);
         task1.setTaskType(taskType);
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("url", "http://google.com");
+        params.put("method", "GET");
+        task1.setParams(params);
         tasks.add(task1);
-
     }
 
     @Override

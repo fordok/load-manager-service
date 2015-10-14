@@ -1,6 +1,7 @@
 package net.fordok.service.dto;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by fordok on 10/9/2015.
@@ -11,12 +12,14 @@ public class Task {
     private String taskId;
     private String status;
     private TaskType taskType;
+    private Map<String,String> params;
     private int initialCount;
     private int totalCount;
     private int rampUpTime;
     private int period;
     private Date startTs;
     private Date stopTs;
+    private String resultId;
 
     public Task() {
     }
@@ -55,6 +58,14 @@ public class Task {
 
     public void setTaskType(TaskType taskType) {
         this.taskType = taskType;
+    }
+
+    public Map<String, String> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
     }
 
     public int getInitialCount() {
@@ -103,5 +114,13 @@ public class Task {
 
     public void setStopTs(Date stopTs) {
         this.stopTs = stopTs;
+    }
+
+    public String getResultId() {
+        return resultId;
+    }
+
+    public void setResultId(String resultId) {
+        this.resultId = resultId;
     }
 }

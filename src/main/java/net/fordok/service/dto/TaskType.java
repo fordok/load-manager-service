@@ -9,7 +9,8 @@ import java.util.Map;
 public class TaskType {
     private String taskTypeId;
     private String name;
-    private Map<String, String> params;
+    private List<String> inputParams;
+    private List<String> outputParams;
 
     public TaskType() {
     }
@@ -30,11 +31,19 @@ public class TaskType {
         this.name = name;
     }
 
-    public Map<String, String> getParams() {
-        return params;
+    public List<String> getInputParams() {
+        return inputParams;
     }
 
-    public void setParams(Map<String, String> params) {
-        this.params = params;
+    public void setInputParams(List<String> inputParams) {
+        this.inputParams = inputParams;
+    }
+
+    public List<String> getOutputParams() {
+        return outputParams;
+    }
+
+    public void setOutputParams(List<String> outputParams) {
+        this.outputParams = outputParams;
     }
 }
