@@ -83,7 +83,7 @@ public class TaskResource {
         if (task.getTaskType() != null) {
             TaskType taskType = task.getTaskType();
             if (taskType.getName().equals("Http")) {
-                work = new HttpWork("HttpWork", task.getParams().get("url"), task.getParams().get("method"));
+                work = new HttpWork(task.getName(), task.getParams().get("url"), task.getParams().get("method"));
             }
         }
         configurationSystem.setWork(work);
