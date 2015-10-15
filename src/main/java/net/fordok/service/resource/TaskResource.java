@@ -45,11 +45,17 @@ public class TaskResource {
     }
 
     @POST
-    public Task setTask(Task task){
+    public Task createTask(Task task){
         task.setTaskId(UUID.randomUUID().toString());
         task.setStartTs(new Date());
         task.setStatus("New");
         return storage.saveTask(task);
+    }
+
+    @PUT
+    @Path("/{taskId}")
+    public Task updateTask(@PathParam("taskId") String taskId, Task changedTask) {
+        return storage.updateTaskById(taskId, changedTask);
     }
 
     @PUT

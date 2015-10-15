@@ -17,4 +17,5 @@ public interface Storage {
     Task getTaskById(String taskId);
     Task addTaskForSessionId(String sessionId, Task task);
     Task saveTask(Task task);
+    Task updateTaskById(String taskId, Task changedTask);
 }

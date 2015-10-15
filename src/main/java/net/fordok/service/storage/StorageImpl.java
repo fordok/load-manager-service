@@ -101,4 +101,10 @@ public class StorageImpl implements Storage {
         tasks.put(task.getTaskId(), task);
         return task;
     }
+
+    @Override
+    public Task updateTaskById(String taskId, Task changedTask) {
+        tasks.put(taskId, changedTask);
+        return changedTask;
+    }
 }
