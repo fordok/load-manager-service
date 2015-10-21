@@ -4,6 +4,7 @@ package net.fordok.service.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.fordok.configuration.ConfigurationSystem;
@@ -27,11 +28,12 @@ public class LoadManagerService extends Application<ServiceConfiguration> {
     private Storage storage;
 
     public static void main(String[] args) throws Exception {
-        new LoadManagerService().run(new String[] { "server" });
+        new LoadManagerService().run(args);
     }
 
     @Override
     public void initialize(Bootstrap<ServiceConfiguration> bootstrap) {
+        bootstrap.addBundle(new AssetsBundle("/html", "/"));
         LoadGenerator loadGenerator = new LoadGeneratorImpl();
         loadGenerator.init(new ConfigurationSystem(1, 1000, 100, new HttpWork("HttpWork", "http://google.com", "GET")));
         this.loadGenerator = loadGenerator;
