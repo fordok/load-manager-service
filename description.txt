@@ -1,0 +1,82 @@
+tasks/								              GET/POST
+tasks/{taskId}							        GET/POST/PUT/DELETE
+tasks/{taskId}/start						    PUT 
+tasks/{taskId}/runs/						    GET
+tasks/{taskId}/runs/{taskRunId}		  GET/PUT
+tasks/{taskId}/results						  GET
+tasks/{taskId}/results/{resultId}		GET
+task_types/							            GET/POST
+task_types/{task-type-id}					  GET/POST/PUT/DELETE
+machines							              GET/POST
+machines/{machines-id}						  GET/POST/PUT/DELETE
+
+task_type:
+	task_type_id
+	input_params[](list)
+	output_params[](list)
+task:
+	task_id
+	name
+	task_type
+	input_params[](map)
+	task_runs[]
+task_run:	
+	statusEntities
+	task_run_id	
+	task_id
+	result_id
+	initial_count
+	total_count
+	rampup
+	start_ts
+	end_ts
+result:
+	result_id
+	output_params[](map)
+	
+	
+Task Request:
+	name
+	task_type
+	input_params
+	
+Task Response:
+	message
+	task_id
+	
+Task start request:
+	initial_count
+	total_count
+	rampup
+	start_ts	
+	end_ts
+	
+Task start response:
+	message
+	task_run_id
+	status
+	result_id	
+	
+Features:
+	Multitasking
+	Deploy and run from cloud
+	CPU metrics
+	Alarms
+	Crawler (get list of urls)
+	Bottleneck analysis
+	Predict behaviour neural network
+
+Protocols:
+	HTTP
+	SOAP
+	REST
+	JMS
+	WebSockets
+
+Stack:
+	AngularJS
+	Bootstrap
+	HighCharts
+	Dropwizard
+	Akka
+	Java
