@@ -12,6 +12,7 @@ task_types/{task-type-id}					  GET/POST/PUT/DELETE
 machines							              GET/POST
 machines/{machines-id}						  GET/POST/PUT/DELETE
 
+Entities:
 task_type:
 	task_type_id
 	input_params[](list)
@@ -23,7 +24,7 @@ task:
 	input_params[](map)
 	task_runs[]
 task_run:	
-	statusEntities
+	status
 	task_run_id	
 	task_id
 	result_id
