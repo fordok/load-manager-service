@@ -2,6 +2,7 @@ package net.fordok.service.storage;
 
 import net.fordok.service.dto.Session;
 import net.fordok.service.dto.Task;
+import net.fordok.service.dto.TaskRun;
 import net.fordok.service.dto.TaskType;
 
 import java.util.*;
@@ -12,6 +13,7 @@ import java.util.*;
 public class StorageImpl implements Storage {
     private static List<Session> sessions = new ArrayList<Session>();
     private static Map<String,Task> tasks = new HashMap<String,Task>();
+    private static List<TaskType> taskTypes = new ArrayList<TaskType>();
 
     public StorageImpl() {
         Session session1 = new Session("session1");
@@ -32,21 +34,30 @@ public class StorageImpl implements Storage {
         inputParams.add("url");
         inputParams.add("method");
         taskType.setInputParams(inputParams);
+        taskTypes.add(taskType);
 
-        Task task1 = new Task("test1");
-        task1.setTaskId(UUID.randomUUID().toString());
-        task1.setStartTs(new Date());
-        task1.setStopTs(new Date());
-        task1.setStatus("Finished");
-        task1.setInitialCount(10);
-        task1.setTotalCount(10);
-        task1.setPeriod(1000);
-        task1.setTaskType(taskType);
+        Task task = new Task("test1");
+        task.setTaskId(UUID.randomUUID().toString());
+        task.setTaskType(taskType);
         Map<String,String> params = new HashMap<String,String>();
         params.put("url", "http://google.com");
         params.put("method", "GET");
-        task1.setParams(params);
-        tasks.put(task1.getTaskId(), task1);
+        task.setParams(params);
+
+        TaskRun taskRun = new TaskRun();
+        taskRun.setInitialCount(1);
+        taskRun.setStatus("Finished");
+        taskRun.setTaskId(task.getTaskId());
+        taskRun.setTaskRunId(UUID.randomUUID().toString());
+        taskRun.setStartTs(new Date());
+        taskRun.setStopTs(new Date());
+        taskRun.setTotalCount(1);
+        taskRun.setPeriod(1000);
+
+        List<TaskRun> taskRuns = new ArrayList<TaskRun>();
+        taskRuns.add(taskRun);
+        task.setTaskRuns(taskRuns);
+        tasks.put(task.getTaskId(), task);
     }
 
     @Override
@@ -98,6 +109,10 @@ public class StorageImpl implements Storage {
 
     @Override
     public Task saveTask(Task task) {
+        task.setTaskId(UUID.randomUUID().toString());
+        if (task.getTaskRuns() == null) {
+            task.setTaskRuns(new ArrayList<TaskRun>());
+        }
         tasks.put(task.getTaskId(), task);
         return task;
     }
@@ -106,5 +121,15 @@ public class StorageImpl implements Storage {
     public Task updateTaskById(String taskId, Task changedTask) {
         tasks.put(taskId, changedTask);
         return changedTask;
+    }
+
+    @Override
+    public TaskType getTaskTypeByName(String name) {
+        for (TaskType taskType : taskTypes) {
+            if (taskType.getName().equals(name)) {
+                return taskType;
+            }
+        }
+        return null;
     }
 }

@@ -5,7 +5,12 @@ import net.fordok.configuration.ConfigurationSystem;
 import net.fordok.core.LoadGenerator;
 import net.fordok.service.dto.Configuration;
 import net.fordok.service.dto.Task;
+import net.fordok.service.dto.TaskRun;
 import net.fordok.service.dto.TaskType;
+import net.fordok.service.service.TaskRequest;
+import net.fordok.service.service.TaskResponse;
+import net.fordok.service.service.TaskStartRequest;
+import net.fordok.service.service.TaskStartResponse;
 import net.fordok.service.storage.Storage;
 import net.fordok.work.HttpWork;
 import net.fordok.work.Work;
@@ -45,11 +50,16 @@ public class TaskResource {
     }
 
     @POST
-    public Task createTask(Task task){
-        task.setTaskId(UUID.randomUUID().toString());
-        task.setStartTs(new Date());
-        task.setStatus("New");
-        return storage.saveTask(task);
+    public TaskResponse createTask(TaskRequest taskRequest){
+        Task task = new Task();
+        task.setName(taskRequest.getName());
+        task.setParams(taskRequest.getParams());
+        task.setTaskType(storage.getTaskTypeByName(taskRequest.getTaskType()));
+        task = storage.saveTask(task);
+        TaskResponse taskResponse = new TaskResponse();
+        taskResponse.setMessage("Success");
+        taskResponse.setTaskId(task.getTaskId());
+        return taskResponse;
     }
 
     @PUT
@@ -60,31 +70,45 @@ public class TaskResource {
 
     @PUT
     @Path("/{taskId}/{action}")
-    public Task makeAction(@PathParam("taskId") String taskId, @PathParam("action") String action) {
+    public TaskStartResponse makeAction(@PathParam("taskId") String taskId, @PathParam("action") String action, TaskStartRequest request) {
         Task task = storage.getTaskById(taskId);
+        TaskStartResponse response = new TaskStartResponse();
+        TaskRun taskRun = new TaskRun();
+        taskRun.setInitialCount(request.getInitialCount());
+        taskRun.setTotalCount(request.getTotalCount());
+        taskRun.setPeriod(request.getPeriod());
+        taskRun.setRampUp(request.getRampUp());
+        taskRun.setStartTs(request.getStartTs());
+        taskRun.setStopTs(request.getStopTs());
+        taskRun.setTaskId(task.getTaskId());
+        taskRun.setTaskRunId(UUID.randomUUID().toString());
         if (action.equals("start")) {
-            ConfigurationSystem configurationSystem = extractTaskConfiguration(task);
+            ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
             loadGenerator.setConfiguration(configurationSystem);
             loadGenerator.start();
-            task.setStatus("Running");
+            task.getTaskRuns().add(taskRun);
+            response.setStatus("Running");
+            taskRun.setStatus("Running");
         } else if (action.equals("stop")) {
             loadGenerator.stop();
-            task.setStatus("Finished");
+            response.setStatus("Finished");
+            taskRun.setStatus("Finished");
         } else if (action.equals("suspend")) {
             loadGenerator.suspend();
-            task.setStatus("Suspended");
+            response.setStatus("Suspended");
         } else if (action.equals("resume")) {
             loadGenerator.resume();
-            task.setStatus("Running");
+            response.setStatus("Running");
         }
-        storage.saveTask(task);
-        return task;
+        response.setMessage("Success");
+        storage.updateTaskById(task.getTaskId(), task);
+        return response;
     }
 
-    private ConfigurationSystem extractTaskConfiguration(Task task) {
+    private ConfigurationSystem extractTaskConfiguration(Task task, TaskStartRequest request) {
         ConfigurationSystem configurationSystem = new ConfigurationSystem();
-        configurationSystem.setWorkersCount(task.getTotalCount());
-        configurationSystem.setPeriod(task.getPeriod());
+        configurationSystem.setWorkersCount(request.getTotalCount());
+        configurationSystem.setPeriod(request.getPeriod());
         Work work = null;
         if (task.getTaskType() != null) {
             TaskType taskType = task.getTaskType();

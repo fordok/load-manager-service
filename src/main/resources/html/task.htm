@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="taskApp">
 <head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <meta charset="UTF-8">
-    <title></title>
+    <title>Load generator</title>
 </head>
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript" src="js/task.js"></script>
 <body>
 <div ng-controller="taskController">
-    I can add: {{a}} + {{b}} =  {{ a+b }}
+    <h1>I can add: {{a}} + {{b}} =  {{ a+b }}</h1>
+    <button type="button" class="btn btn-success">Success</button>
 </div>
 </body>
 </html>

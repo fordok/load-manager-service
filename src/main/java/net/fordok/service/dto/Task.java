@@ -1,6 +1,7 @@
 package net.fordok.service.dto;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,30 +11,15 @@ public class Task {
 
     private String name;
     private String taskId;
-    private String status;
     private TaskType taskType;
     private Map<String,String> params;
-    private int initialCount;
-    private int totalCount;
-    private int rampUpTime;
-    private int period;
-    private Date startTs;
-    private Date stopTs;
-    private String resultId;
+    private List<TaskRun> taskRuns;
 
     public Task() {
     }
 
     public Task(String name) {
         this.name = name;
-    }
-
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
     }
 
     public String getName() {
@@ -44,12 +30,12 @@ public class Task {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
     public TaskType getTaskType() {
@@ -68,59 +54,11 @@ public class Task {
         this.params = params;
     }
 
-    public int getInitialCount() {
-        return initialCount;
+    public List<TaskRun> getTaskRuns() {
+        return taskRuns;
     }
 
-    public void setInitialCount(int initialCount) {
-        this.initialCount = initialCount;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    public int getRampUpTime() {
-        return rampUpTime;
-    }
-
-    public void setRampUpTime(int rampUpTime) {
-        this.rampUpTime = rampUpTime;
-    }
-
-    public int getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(int period) {
-        this.period = period;
-    }
-
-    public Date getStartTs() {
-        return startTs;
-    }
-
-    public void setStartTs(Date startTs) {
-        this.startTs = startTs;
-    }
-
-    public Date getStopTs() {
-        return stopTs;
-    }
-
-    public void setStopTs(Date stopTs) {
-        this.stopTs = stopTs;
-    }
-
-    public String getResultId() {
-        return resultId;
-    }
-
-    public void setResultId(String resultId) {
-        this.resultId = resultId;
+    public void setTaskRuns(List<TaskRun> taskRuns) {
+        this.taskRuns = taskRuns;
     }
 }

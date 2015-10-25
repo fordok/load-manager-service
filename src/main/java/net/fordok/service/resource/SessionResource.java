@@ -61,8 +61,6 @@ public class SessionResource {
     @Path("/{sessionId}/tasks")
     public Task addTaskForSession(@PathParam("sessionId") String sessionId, Task task) {
         task.setTaskId(UUID.randomUUID().toString());
-        task.setStartTs(new Date());
-        task.setStatus("Active");
         return storage.addTaskForSessionId(sessionId, task);
     }
 }

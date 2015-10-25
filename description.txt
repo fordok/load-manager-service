@@ -15,6 +15,7 @@ machines/{machines-id}						  GET/POST/PUT/DELETE
 Entities:
 task_type:
 	task_type_id
+	name
 	input_params[](list)
 	output_params[](list)
 task:
@@ -30,6 +31,7 @@ task_run:
 	result_id
 	initial_count
 	total_count
+	period
 	rampup
 	start_ts
 	end_ts
@@ -51,6 +53,7 @@ Task start request:
 	initial_count
 	total_count
 	rampup
+	period
 	start_ts	
 	end_ts
 	
