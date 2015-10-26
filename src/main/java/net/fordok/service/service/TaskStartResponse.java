@@ -5,7 +5,6 @@ package net.fordok.service.service;
  */
 public class TaskStartResponse {
     private String taskRunId;
-    private String status;
     private String resultId;
     private String message;
 
@@ -18,14 +17,6 @@ public class TaskStartResponse {
 
     public void setTaskRunId(String taskRunId) {
         this.taskRunId = taskRunId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getResultId() {

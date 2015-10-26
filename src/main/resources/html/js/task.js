@@ -1,5 +1,7 @@
 var app = angular.module('taskApp', []);
-var taskController = app.controller('taskController', function($scope) {
-    $scope.a = 1;
-    $scope.b = 2;
+var taskController = app.controller('TaskController', function($http,$scope) {
+    $http.get('http://localhost:8080/api/tasks').
+        success(function(data) {
+            $scope.tasks = data;
+        });
 });

@@ -8,8 +8,10 @@
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript" src="js/task.js"></script>
 <body>
-<div ng-controller="taskController">
-    <h1>I can add: {{a}} + {{b}} =  {{ a+b }}</h1>
+<div ng-controller="TaskController">
+    <div ng-repeat="task in tasks">
+        {{task.name}}
+    </div>
     <button type="button" class="btn btn-success">Success</button>
 </div>
 </body>

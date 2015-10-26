@@ -87,18 +87,14 @@ public class TaskResource {
             loadGenerator.setConfiguration(configurationSystem);
             loadGenerator.start();
             task.getTaskRuns().add(taskRun);
-            response.setStatus("Running");
             taskRun.setStatus("Running");
         } else if (action.equals("stop")) {
             loadGenerator.stop();
-            response.setStatus("Finished");
             taskRun.setStatus("Finished");
         } else if (action.equals("suspend")) {
             loadGenerator.suspend();
-            response.setStatus("Suspended");
         } else if (action.equals("resume")) {
             loadGenerator.resume();
-            response.setStatus("Running");
         }
         response.setMessage("Success");
         storage.updateTaskById(task.getTaskId(), task);
