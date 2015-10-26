@@ -3,7 +3,7 @@ package net.fordok.service.storage;
 import net.fordok.service.dto.Session;
 import net.fordok.service.dto.Task;
 import net.fordok.service.dto.TaskRun;
-import net.fordok.service.dto.TaskType;
+import net.fordok.service.dto.Type;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ import java.util.*;
 public class StorageImpl implements Storage {
     private static List<Session> sessions = new ArrayList<Session>();
     private static Map<String,Task> tasks = new HashMap<String,Task>();
-    private static List<TaskType> taskTypes = new ArrayList<TaskType>();
+    private static List<Type> types = new ArrayList<Type>();
 
     public StorageImpl() {
         Session session1 = new Session("session1");
@@ -27,18 +27,17 @@ public class StorageImpl implements Storage {
         sessions.add(session1);
         sessions.add(session2);
 
-        TaskType taskType = new TaskType();
-        taskType.setName("Http");
-        taskType.setTaskTypeId(UUID.randomUUID().toString());
+        Type type = new Type();
+        type.setName("Http");
         List<String> inputParams = new ArrayList<String>();
         inputParams.add("url");
         inputParams.add("method");
-        taskType.setInputParams(inputParams);
-        taskTypes.add(taskType);
+        type.setInputParams(inputParams);
+        types.add(type);
 
         Task task = new Task("test1");
         task.setTaskId(UUID.randomUUID().toString());
-        task.setTaskType(taskType);
+        task.setType(type);
         Map<String,String> params = new HashMap<String,String>();
         params.put("url", "http://google.com");
         params.put("method", "GET");
@@ -124,12 +123,23 @@ public class StorageImpl implements Storage {
     }
 
     @Override
-    public TaskType getTaskTypeByName(String name) {
-        for (TaskType taskType : taskTypes) {
-            if (taskType.getName().equals(name)) {
-                return taskType;
+    public Type getTypeByName(String name) {
+        for (Type type : types) {
+            if (type.getName().equals(name)) {
+                return type;
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Type> getTypes() {
+        return types;
+    }
+
+    @Override
+    public Type saveType(Type type) {
+        types.add(type);
+        return type;
     }
 }

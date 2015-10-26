@@ -6,6 +6,8 @@ import java.util.Date;
  * Created by fordok on 10/25/2015.
  */
 public class TaskRun {
+
+    private Task task;
     private String taskRunId;
     private String taskId;
     private String resultId;
@@ -18,6 +20,14 @@ public class TaskRun {
     private Date stopTs;
 
     public TaskRun() {
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public String getTaskRunId() {

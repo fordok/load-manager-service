@@ -1,27 +1,26 @@
 API:
 
 tasks/								              GET/POST
-tasks/{taskId}							        GET/POST/PUT/DELETE
+tasks/{taskId}							        GET/PUT/DELETE
 tasks/{taskId}/start						    PUT 
 tasks/{taskId}/runs/						    GET
 tasks/{taskId}/runs/{taskRunId}		  GET/PUT
 tasks/{taskId}/results						  GET
 tasks/{taskId}/results/{resultId}		GET
-task_types/							            GET/POST
-task_types/{task-type-id}					  GET/POST/PUT/DELETE
+types/							            GET/POST
+types/{typeName}					  GET/PUT/DELETE
 machines							              GET/POST
-machines/{machines-id}						  GET/POST/PUT/DELETE
+machines/{machines-id}						  GET/PUT/DELETE
 
 Entities:
-task_type:
-	task_type_id
+type:
 	name
 	input_params[](list)
 	output_params[](list)
 task:
 	task_id
 	name
-	task_type
+	type_name
 	input_params[](map)
 	task_runs[]
 task_run:	
@@ -38,7 +37,14 @@ task_run:
 result:
 	result_id
 	output_params[](map)
-	
+
+Task Type Request:
+	name
+	input_params[](list)
+	output_params[](list)
+
+Task Type Response:
+	message
 	
 Task Request:
 	name

@@ -3,10 +3,9 @@ package net.fordok.service.resource;
 import com.codahale.metrics.annotation.Timed;
 import net.fordok.configuration.ConfigurationSystem;
 import net.fordok.core.LoadGenerator;
-import net.fordok.service.dto.Configuration;
 import net.fordok.service.dto.Task;
 import net.fordok.service.dto.TaskRun;
-import net.fordok.service.dto.TaskType;
+import net.fordok.service.dto.Type;
 import net.fordok.service.service.TaskRequest;
 import net.fordok.service.service.TaskResponse;
 import net.fordok.service.service.TaskStartRequest;
@@ -17,7 +16,6 @@ import net.fordok.work.Work;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +52,7 @@ public class TaskResource {
         Task task = new Task();
         task.setName(taskRequest.getName());
         task.setParams(taskRequest.getParams());
-        task.setTaskType(storage.getTaskTypeByName(taskRequest.getTaskType()));
+        task.setType(storage.getTypeByName(taskRequest.getTaskType()));
         task = storage.saveTask(task);
         TaskResponse taskResponse = new TaskResponse();
         taskResponse.setMessage("Success");
@@ -73,20 +71,13 @@ public class TaskResource {
     public TaskStartResponse makeAction(@PathParam("taskId") String taskId, @PathParam("action") String action, TaskStartRequest request) {
         Task task = storage.getTaskById(taskId);
         TaskStartResponse response = new TaskStartResponse();
-        TaskRun taskRun = new TaskRun();
-        taskRun.setInitialCount(request.getInitialCount());
-        taskRun.setTotalCount(request.getTotalCount());
-        taskRun.setPeriod(request.getPeriod());
-        taskRun.setRampUp(request.getRampUp());
-        taskRun.setStartTs(request.getStartTs());
-        taskRun.setStopTs(request.getStopTs());
-        taskRun.setTaskId(task.getTaskId());
-        taskRun.setTaskRunId(UUID.randomUUID().toString());
+        TaskRun taskRun = mapRequestToRun(request, task);
         if (action.equals("start")) {
             ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
             loadGenerator.setConfiguration(configurationSystem);
             loadGenerator.start();
             task.getTaskRuns().add(taskRun);
+            taskRun.setTask(task);
             taskRun.setStatus("Running");
         } else if (action.equals("stop")) {
             loadGenerator.stop();
@@ -101,14 +92,27 @@ public class TaskResource {
         return response;
     }
 
+    private TaskRun mapRequestToRun(TaskStartRequest request, Task task) {
+        TaskRun taskRun = new TaskRun();
+        taskRun.setInitialCount(request.getInitialCount());
+        taskRun.setTotalCount(request.getTotalCount());
+        taskRun.setPeriod(request.getPeriod());
+        taskRun.setRampUp(request.getRampUp());
+        taskRun.setStartTs(request.getStartTs());
+        taskRun.setStopTs(request.getStopTs());
+        taskRun.setTaskId(task.getTaskId());
+        taskRun.setTaskRunId(UUID.randomUUID().toString());
+        return taskRun;
+    }
+
     private ConfigurationSystem extractTaskConfiguration(Task task, TaskStartRequest request) {
         ConfigurationSystem configurationSystem = new ConfigurationSystem();
         configurationSystem.setWorkersCount(request.getTotalCount());
         configurationSystem.setPeriod(request.getPeriod());
         Work work = null;
-        if (task.getTaskType() != null) {
-            TaskType taskType = task.getTaskType();
-            if (taskType.getName().equals("Http")) {
+        if (task.getType() != null) {
+            Type type = task.getType();
+            if (type.getName().equals("Http")) {
                 work = new HttpWork(task.getName(), task.getParams().get("url"), task.getParams().get("method"));
             }
         }

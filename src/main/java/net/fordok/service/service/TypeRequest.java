@@ -1,26 +1,16 @@
-package net.fordok.service.dto;
+package net.fordok.service.service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by fordok on 10/9/2015.
+ * Created by fordok on 10/26/2015.
  */
-public class TaskType {
-    private String taskTypeId;
+public class TypeRequest {
     private String name;
     private List<String> inputParams;
     private List<String> outputParams;
 
-    public TaskType() {
-    }
-
-    public String getTaskTypeId() {
-        return taskTypeId;
-    }
-
-    public void setTaskTypeId(String taskTypeId) {
-        this.taskTypeId = taskTypeId;
+    public TypeRequest() {
     }
 
     public String getName() {

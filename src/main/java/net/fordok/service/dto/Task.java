@@ -1,6 +1,5 @@
 package net.fordok.service.dto;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,7 @@ public class Task {
 
     private String name;
     private String taskId;
-    private TaskType taskType;
+    private Type type;
     private Map<String,String> params;
     private List<TaskRun> taskRuns;
 
@@ -38,12 +37,12 @@ public class Task {
         this.taskId = taskId;
     }
 
-    public TaskType getTaskType() {
-        return taskType;
+    public Type getType() {
+        return type;
     }
 
-    public void setTaskType(TaskType taskType) {
-        this.taskType = taskType;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public Map<String, String> getParams() {
