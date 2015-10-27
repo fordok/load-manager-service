@@ -38,13 +38,25 @@ result:
 	result_id
 	output_params[](map)
 
-Task Type Request:
+Type Request:
 	name
 	input_params[](list)
 	output_params[](list)
 
-Task Type Response:
+Type Response:
 	message
+
+Type Request example:
+{
+	"name" : "Http",
+	"inputParams" : ["method", "url"],
+	"outputParams" : ["code"]
+}
+
+Type Response example:
+{
+	"message" : "success"
+}
 	
 Task Request:
 	name
