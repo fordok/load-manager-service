@@ -74,18 +74,13 @@ public class TaskResource {
         Run run = mapRequestToRun(request, task);
         if (action.equals("start")) {
             ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
-            loadGenerator.setConfiguration(configurationSystem);
-            loadGenerator.start();
+            loadGenerator.start(configurationSystem);
             task.getRuns().add(run);
             run.setTask(task);
             run.setStatus("Running");
         } else if (action.equals("stop")) {
             loadGenerator.stop();
             run.setStatus("Finished");
-        } else if (action.equals("suspend")) {
-            loadGenerator.suspend();
-        } else if (action.equals("resume")) {
-            loadGenerator.resume();
         }
         response.setMessage("Success");
         storage.updateTaskById(task.getTaskId(), task);
@@ -113,7 +108,7 @@ public class TaskResource {
         if (task.getType() != null) {
             Type type = task.getType();
             if (type.getName().equals("Http")) {
-                work = new HttpWork(task.getName(), task.getParams().get("url"), task.getParams().get("method"));
+                work = new HttpWork(task.getParams());
             }
         }
         configurationSystem.setWork(work);

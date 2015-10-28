@@ -4,19 +4,19 @@ package net.fordok.service.service;
  * Created by fordok on 10/25/2015.
  */
 public class TaskStartResponse {
-    private String taskRunId;
+    private String runId;
     private String resultId;
     private String message;
 
     public TaskStartResponse() {
     }
 
-    public String getTaskRunId() {
-        return taskRunId;
+    public String getRunId() {
+        return runId;
     }
 
-    public void setTaskRunId(String taskRunId) {
-        this.taskRunId = taskRunId;
+    public void setRunId(String runId) {
+        this.runId = runId;
     }
 
     public String getResultId() {
