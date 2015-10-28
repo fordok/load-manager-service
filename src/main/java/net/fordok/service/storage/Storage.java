@@ -22,4 +22,5 @@ public interface Storage {
     Type getTypeByName(String name);
     List<Type> getTypes();
     Type saveType(Type type);
+    Type updateTypeByName(String typeName, Type changedType);
 }

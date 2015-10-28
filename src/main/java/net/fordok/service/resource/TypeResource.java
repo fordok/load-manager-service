@@ -6,10 +6,7 @@ import net.fordok.service.service.TypeRequest;
 import net.fordok.service.service.TypeResponse;
 import net.fordok.service.storage.Storage;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -39,6 +36,19 @@ public class TypeResource {
         type.setInputParams(typeRequest.getInputParams());
         type.setOutputParams(typeRequest.getOutputParams());
         storage.saveType(type);
+        return new TypeResponse("Success");
+    }
+
+    @GET
+    @Path("/{typeName}")
+    public Type getTypeByName(@PathParam("typeName") String typeName) {
+        return storage.getTypeByName(typeName);
+    }
+
+    @PUT
+    @Path("/{typeName}")
+    public TypeResponse updateTypeByName(@PathParam("typeName") String typeName, Type type) {
+        storage.updateTypeByName(typeName, type);
         return new TypeResponse("Success");
     }
 }

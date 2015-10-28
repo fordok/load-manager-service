@@ -13,7 +13,7 @@ import java.util.*;
 public class StorageImpl implements Storage {
     private static List<Session> sessions = new ArrayList<Session>();
     private static Map<String,Task> tasks = new HashMap<String,Task>();
-    private static List<Type> types = new ArrayList<Type>();
+    private static Map<String,Type> types = new HashMap<String,Type>();
 
     public StorageImpl() {
         Session session1 = new Session("session1");
@@ -33,7 +33,10 @@ public class StorageImpl implements Storage {
         inputParams.add("url");
         inputParams.add("method");
         type.setInputParams(inputParams);
-        types.add(type);
+        List<String> outputParams = new ArrayList<String>();
+        outputParams.add("code");
+        type.setOutputParams(outputParams);
+        types.put(type.getName(), type);
 
         Task task = new Task("test1");
         task.setTaskId(UUID.randomUUID().toString());
@@ -124,22 +127,22 @@ public class StorageImpl implements Storage {
 
     @Override
     public Type getTypeByName(String name) {
-        for (Type type : types) {
-            if (type.getName().equals(name)) {
-                return type;
-            }
-        }
-        return null;
+        return types.get(name);
     }
 
     @Override
     public List<Type> getTypes() {
-        return types;
+        return new ArrayList<Type>(types.values());
     }
 
     @Override
     public Type saveType(Type type) {
-        types.add(type);
+        types.put(type.getName(), type);
         return type;
+    }
+
+    @Override
+    public Type updateTypeByName(String typeName, Type changedType) {
+        return types.put(typeName, changedType);
     }
 }
