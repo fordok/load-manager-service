@@ -5,10 +5,10 @@ import java.util.Date;
 /**
  * Created by fordok on 10/25/2015.
  */
-public class TaskRun {
+public class Run {
 
     private Task task;
-    private String taskRunId;
+    private String runId;
     private String taskId;
     private String resultId;
     private String status;
@@ -19,7 +19,7 @@ public class TaskRun {
     private Date startTs;
     private Date stopTs;
 
-    public TaskRun() {
+    public Run() {
     }
 
     public Task getTask() {
@@ -30,12 +30,12 @@ public class TaskRun {
         this.task = task;
     }
 
-    public String getTaskRunId() {
-        return taskRunId;
+    public String getRunId() {
+        return runId;
     }
 
-    public void setTaskRunId(String taskRunId) {
-        this.taskRunId = taskRunId;
+    public void setRunId(String runId) {
+        this.runId = runId;
     }
 
     public String getTaskId() {

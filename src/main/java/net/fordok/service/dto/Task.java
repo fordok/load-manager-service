@@ -12,7 +12,7 @@ public class Task {
     private String taskId;
     private Type type;
     private Map<String,String> params;
-    private List<TaskRun> taskRuns;
+    private List<Run> runs;
 
     public Task() {
     }
@@ -53,11 +53,11 @@ public class Task {
         this.params = params;
     }
 
-    public List<TaskRun> getTaskRuns() {
-        return taskRuns;
+    public List<Run> getRuns() {
+        return runs;
     }
 
-    public void setTaskRuns(List<TaskRun> taskRuns) {
-        this.taskRuns = taskRuns;
+    public void setRuns(List<Run> runs) {
+        this.runs = runs;
     }
 }

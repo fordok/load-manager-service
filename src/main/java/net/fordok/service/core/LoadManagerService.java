@@ -39,12 +39,6 @@ public class LoadManagerService extends Application<ServiceConfiguration> {
 
     @Override
     public void run(ServiceConfiguration serviceConfiguration, Environment environment) throws Exception {
-        final StatusResource statusResource = new StatusResource();
-        environment.jersey().register(statusResource);
-        final ManagerResource managerResource = new ManagerResource(loadGenerator);
-        environment.jersey().register(managerResource);
-        final SessionResource sessionResource = new SessionResource(storage);
-        environment.jersey().register(sessionResource);
         final TaskResource taskResource = new TaskResource(storage, loadGenerator);
         environment.jersey().register(taskResource);
         final TypeResource typeResource = new TypeResource(storage);

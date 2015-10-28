@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import net.fordok.configuration.ConfigurationSystem;
 import net.fordok.core.LoadGenerator;
 import net.fordok.service.dto.Task;
-import net.fordok.service.dto.TaskRun;
+import net.fordok.service.dto.Run;
 import net.fordok.service.dto.Type;
 import net.fordok.service.service.TaskRequest;
 import net.fordok.service.service.TaskResponse;
@@ -71,17 +71,17 @@ public class TaskResource {
     public TaskStartResponse makeAction(@PathParam("taskId") String taskId, @PathParam("action") String action, TaskStartRequest request) {
         Task task = storage.getTaskById(taskId);
         TaskStartResponse response = new TaskStartResponse();
-        TaskRun taskRun = mapRequestToRun(request, task);
+        Run run = mapRequestToRun(request, task);
         if (action.equals("start")) {
             ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
             loadGenerator.setConfiguration(configurationSystem);
             loadGenerator.start();
-            task.getTaskRuns().add(taskRun);
-            taskRun.setTask(task);
-            taskRun.setStatus("Running");
+            task.getRuns().add(run);
+            run.setTask(task);
+            run.setStatus("Running");
         } else if (action.equals("stop")) {
             loadGenerator.stop();
-            taskRun.setStatus("Finished");
+            run.setStatus("Finished");
         } else if (action.equals("suspend")) {
             loadGenerator.suspend();
         } else if (action.equals("resume")) {
@@ -92,17 +92,17 @@ public class TaskResource {
         return response;
     }
 
-    private TaskRun mapRequestToRun(TaskStartRequest request, Task task) {
-        TaskRun taskRun = new TaskRun();
-        taskRun.setInitialCount(request.getInitialCount());
-        taskRun.setTotalCount(request.getTotalCount());
-        taskRun.setPeriod(request.getPeriod());
-        taskRun.setRampUp(request.getRampUp());
-        taskRun.setStartTs(request.getStartTs());
-        taskRun.setStopTs(request.getStopTs());
-        taskRun.setTaskId(task.getTaskId());
-        taskRun.setTaskRunId(UUID.randomUUID().toString());
-        return taskRun;
+    private Run mapRequestToRun(TaskStartRequest request, Task task) {
+        Run run = new Run();
+        run.setInitialCount(request.getInitialCount());
+        run.setTotalCount(request.getTotalCount());
+        run.setPeriod(request.getPeriod());
+        run.setRampUp(request.getRampUp());
+        run.setStartTs(request.getStartTs());
+        run.setStopTs(request.getStopTs());
+        run.setTaskId(task.getTaskId());
+        run.setRunId(UUID.randomUUID().toString());
+        return run;
     }
 
     private ConfigurationSystem extractTaskConfiguration(Task task, TaskStartRequest request) {

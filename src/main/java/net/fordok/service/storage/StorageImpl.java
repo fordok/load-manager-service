@@ -1,8 +1,7 @@
 package net.fordok.service.storage;
 
-import net.fordok.service.dto.Session;
 import net.fordok.service.dto.Task;
-import net.fordok.service.dto.TaskRun;
+import net.fordok.service.dto.Run;
 import net.fordok.service.dto.Type;
 
 import java.util.*;
@@ -11,21 +10,10 @@ import java.util.*;
  * Created by fordok on 10/8/2015.
  */
 public class StorageImpl implements Storage {
-    private static List<Session> sessions = new ArrayList<Session>();
     private static Map<String,Task> tasks = new HashMap<String,Task>();
     private static Map<String,Type> types = new HashMap<String,Type>();
 
     public StorageImpl() {
-        Session session1 = new Session("session1");
-        session1.setSessionId(UUID.randomUUID().toString());
-        session1.setStartTs(new Date());
-        session1.setStatus("Finished");
-        Session session2 = new Session("session2");
-        session2.setSessionId(UUID.randomUUID().toString());
-        session2.setStartTs(new Date());
-        session2.setStatus("Finished");
-        sessions.add(session1);
-        sessions.add(session2);
 
         Type type = new Type();
         type.setName("Http");
@@ -46,41 +34,20 @@ public class StorageImpl implements Storage {
         params.put("method", "GET");
         task.setParams(params);
 
-        TaskRun taskRun = new TaskRun();
-        taskRun.setInitialCount(1);
-        taskRun.setStatus("Finished");
-        taskRun.setTaskId(task.getTaskId());
-        taskRun.setTaskRunId(UUID.randomUUID().toString());
-        taskRun.setStartTs(new Date());
-        taskRun.setStopTs(new Date());
-        taskRun.setTotalCount(1);
-        taskRun.setPeriod(1000);
+        Run run = new Run();
+        run.setInitialCount(1);
+        run.setStatus("Finished");
+        run.setTaskId(task.getTaskId());
+        run.setRunId(UUID.randomUUID().toString());
+        run.setStartTs(new Date());
+        run.setStopTs(new Date());
+        run.setTotalCount(1);
+        run.setPeriod(1000);
 
-        List<TaskRun> taskRuns = new ArrayList<TaskRun>();
-        taskRuns.add(taskRun);
-        task.setTaskRuns(taskRuns);
+        List<Run> runs = new ArrayList<Run>();
+        runs.add(run);
+        task.setRuns(runs);
         tasks.put(task.getTaskId(), task);
-    }
-
-    @Override
-    public List<Session> getSessions() {
-        return sessions;
-    }
-
-    @Override
-    public Session getSessionById(String sessionId) {
-        for (Session session : sessions) {
-            if (session.getSessionId().equals(sessionId)) {
-                return session;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Session saveSession(Session session) {
-        sessions.add(session);
-        return session;
     }
 
     @Override
@@ -89,31 +56,15 @@ public class StorageImpl implements Storage {
     }
 
     @Override
-    public List<Task> getTasksBySessionId(String sessionId) {
-        return getSessionById(sessionId).getTasks();
-    }
-
-    @Override
     public Task getTaskById(String taskId) {
         return tasks.get(taskId);
     }
 
     @Override
-    public Task addTaskForSessionId(String sessionId, Task task) {
-        for (Session session : sessions) {
-            if (session.getSessionId().equals(sessionId)) {
-                session.getTasks().add(task);
-                return task;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public Task saveTask(Task task) {
         task.setTaskId(UUID.randomUUID().toString());
-        if (task.getTaskRuns() == null) {
-            task.setTaskRuns(new ArrayList<TaskRun>());
+        if (task.getRuns() == null) {
+            task.setRuns(new ArrayList<Run>());
         }
         tasks.put(task.getTaskId(), task);
         return task;
@@ -126,13 +77,13 @@ public class StorageImpl implements Storage {
     }
 
     @Override
-    public Type getTypeByName(String name) {
-        return types.get(name);
+    public List<Type> getTypes() {
+        return new ArrayList<Type>(types.values());
     }
 
     @Override
-    public List<Type> getTypes() {
-        return new ArrayList<Type>(types.values());
+    public Type getTypeByName(String name) {
+        return types.get(name);
     }
 
     @Override
