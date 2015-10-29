@@ -7,7 +7,6 @@ import java.util.Date;
  */
 public class Run {
 
-    private Task task;
     private String runId;
     private String taskId;
     private String resultId;
@@ -20,14 +19,6 @@ public class Run {
     private Date stopTs;
 
     public Run() {
-    }
-
-    public Task getTask() {
-        return task;
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
     }
 
     public String getRunId() {

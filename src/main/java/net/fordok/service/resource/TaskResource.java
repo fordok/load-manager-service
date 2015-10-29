@@ -6,16 +6,14 @@ import net.fordok.core.LoadGenerator;
 import net.fordok.service.dto.Task;
 import net.fordok.service.dto.Run;
 import net.fordok.service.dto.Type;
-import net.fordok.service.service.TaskRequest;
-import net.fordok.service.service.TaskResponse;
-import net.fordok.service.service.TaskStartRequest;
-import net.fordok.service.service.TaskStartResponse;
+import net.fordok.service.service.*;
 import net.fordok.service.storage.Storage;
 import net.fordok.work.HttpWork;
 import net.fordok.work.Work;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,23 +65,36 @@ public class TaskResource {
     }
 
     @PUT
-    @Path("/{taskId}/{action}")
-    public TaskStartResponse makeAction(@PathParam("taskId") String taskId, @PathParam("action") String action, TaskStartRequest request) {
+    @Path("/{taskId}/start")
+    public TaskStartResponse taskStart(@PathParam("taskId") String taskId, TaskStartRequest request) {
         Task task = storage.getTaskById(taskId);
         TaskStartResponse response = new TaskStartResponse();
         Run run = mapRequestToRun(request, task);
-        if (action.equals("start")) {
-            ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
-            loadGenerator.start(configurationSystem);
-            task.getRuns().add(run);
-            run.setTask(task);
-            run.setStatus("Running");
-        } else if (action.equals("stop")) {
-            loadGenerator.stop();
-            run.setStatus("Finished");
-        }
+        ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
+        loadGenerator.start(configurationSystem);
+        run.setStatus("Running");
+        task.getRuns().add(run);
         response.setMessage("Success");
         storage.updateTaskById(task.getTaskId(), task);
+        return response;
+    }
+
+    @PUT
+    @Path("/{taskId}/stop")
+    public TaskStopResponse taskStop(@PathParam("taskId") String taskId) {
+        Task task = storage.getTaskById(taskId);
+        TaskStopResponse response = new TaskStopResponse();
+        loadGenerator.stop();
+        List<Run> runs = task.getRuns();
+        for (Run run : runs) {
+            if (run.getStatus().equals("Running")) {
+                run.setStopTs(new Date());
+                run.setStatus("Finished");
+            }
+        }
+        task.setRuns(runs);
+        response.setMessage("Success");
+        storage.updateTaskById(taskId, task);
         return response;
     }
 
@@ -93,7 +104,11 @@ public class TaskResource {
         run.setTotalCount(request.getTotalCount());
         run.setPeriod(request.getPeriod());
         run.setRampUp(request.getRampUp());
-        run.setStartTs(request.getStartTs());
+        if (request.getStartTs() == null) {
+            run.setStartTs(new Date());
+        } else {
+            run.setStartTs(request.getStartTs());
+        }
         run.setStopTs(request.getStopTs());
         run.setTaskId(task.getTaskId());
         run.setRunId(UUID.randomUUID().toString());

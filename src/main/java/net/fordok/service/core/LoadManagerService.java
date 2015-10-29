@@ -7,7 +7,6 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import net.fordok.configuration.ConfigurationSystem;
 import net.fordok.core.LoadGenerator;
 import net.fordok.core.LoadGeneratorImpl;
 import net.fordok.service.configuration.ServiceConfiguration;

@@ -35,6 +35,7 @@ public class StorageImpl implements Storage {
         task.setParams(params);
 
         Run run = new Run();
+        run.setRunId(UUID.randomUUID().toString());
         run.setInitialCount(1);
         run.setStatus("Finished");
         run.setTaskId(task.getTaskId());
