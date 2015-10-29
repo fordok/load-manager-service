@@ -17,11 +17,11 @@ public class StorageImpl implements Storage {
 
         Type type = new Type();
         type.setName("Http");
-        List<String> inputParams = new ArrayList<String>();
+        List<String> inputParams = new ArrayList<>();
         inputParams.add("url");
         inputParams.add("method");
         type.setInputParams(inputParams);
-        List<String> outputParams = new ArrayList<String>();
+        List<String> outputParams = new ArrayList<>();
         outputParams.add("code");
         type.setOutputParams(outputParams);
         types.put(type.getName(), type);
@@ -29,7 +29,7 @@ public class StorageImpl implements Storage {
         Task task = new Task("test1");
         task.setTaskId(UUID.randomUUID().toString());
         task.setType(type);
-        Map<String,String> params = new HashMap<String,String>();
+        Map<String,String> params = new HashMap<>();
         params.put("url", "http://google.com");
         params.put("method", "GET");
         task.setParams(params);
@@ -44,7 +44,7 @@ public class StorageImpl implements Storage {
         run.setTotalCount(1);
         run.setPeriod(1000);
 
-        List<Run> runs = new ArrayList<Run>();
+        List<Run> runs = new ArrayList<>();
         runs.add(run);
         task.setRuns(runs);
         tasks.put(task.getTaskId(), task);
@@ -52,7 +52,7 @@ public class StorageImpl implements Storage {
 
     @Override
     public List<Task> getTasks() {
-        return new ArrayList<Task>(tasks.values());
+        return new ArrayList<>(tasks.values());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class StorageImpl implements Storage {
 
     @Override
     public List<Type> getTypes() {
-        return new ArrayList<Type>(types.values());
+        return new ArrayList<>(types.values());
     }
 
     @Override

@@ -1,14 +1,14 @@
 API:
 
-tasks/								              GET/POST
-tasks/{taskId}							        GET/PUT/DELETE
-tasks/{taskId}/start						    PUT 
++tasks/								              GET/POST
++tasks/{taskId}							        GET/PUT/DELETE
++tasks/{taskId}/start						    PUT
 tasks/{taskId}/runs/						    GET
 tasks/{taskId}/runs/{taskRunId}		  GET/PUT
 tasks/{taskId}/results						  GET
 tasks/{taskId}/results/{resultId}		GET
-types/							            GET/POST
-types/{typeName}					  GET/PUT/DELETE
++types/							            GET/POST
++types/{typeName}					  GET/PUT/DELETE
 machines							              GET/POST
 machines/{machines-id}						  GET/PUT/DELETE
 
@@ -61,11 +61,27 @@ Type Response example:
 Task Request:
 	name
 	task_type
-	input_params
+	params
 	
 Task Response:
 	message
 	task_id
+
+Task Request example:
+{
+  "name" : "new_task",
+  "taskType" : "Http",
+  "params" : {
+    "method" : "GET",
+    "url" : "http://google.com"
+  }
+}
+
+Task Response example:
+{
+  "message" : "Success",
+  "taskId" : "2729a247-4406-4b58-a1cb-8f42c53b2f91"
+}
 	
 Task start request:
 	initial_count
@@ -79,7 +95,18 @@ Task start response:
 	message
 	task_run_id
 	status
-	result_id	
+	result_id
+
+Task start request:
+
+{
+  "initialCount" : "1",
+  "totalCount" : "1",
+  "rampUp" : "0",
+  "period" : "1000",
+  "startTs" : null,
+  "stopTs" : null
+}
 	
 Features:
 	Multitasking

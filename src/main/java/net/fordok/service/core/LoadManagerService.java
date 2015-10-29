@@ -32,7 +32,7 @@ public class LoadManagerService extends Application<ServiceConfiguration> {
     public void initialize(Bootstrap<ServiceConfiguration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle("/html", "/"));
         LoadGenerator loadGenerator = new LoadGeneratorImpl();
-        loadGenerator.init(new ConfigurationSystem(1, 1000, 100, new HttpWork("HttpWork", "http://google.com", "GET")));
+        loadGenerator.init();
         this.loadGenerator = loadGenerator;
         this.storage = new StorageImpl();
     }
