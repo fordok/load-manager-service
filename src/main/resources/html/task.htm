@@ -8,11 +8,54 @@
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript" src="js/task.js"></script>
 <body>
-<div ng-controller="TaskController">
-    <div ng-repeat="task in tasks">
-        {{task.name}}
+<div ng-controller="TaskController" class="container-fluid">
+    <div class="col-sm-4">
+        <div class="page-header"><h1>Tasks</h1></div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Params</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="task in tasks">
+                <td>{{task.name}}</td>
+                <td>{{task.type.name}}</td>
+                <td>{{task.params}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="page-header"><h1>Task manager</h1></div>
+        <form ng-submit="addTask()">
+            <div class="form-group" ng-class="{ 'has-error': userForm.name.$invalid }">
+                <label>Name:</label>
+                <input type="text" ng-model="task.name" class="form-control" required>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': userForm.name.$invalid }">
+                <label>Type:</label>
+                <select ng-model="task.type" ng-options="type.name for type in types" class="form-control" required></select>
+            </div>
+            <div ng-show="task.type">
+                <div class="form-group" ng-repeat="param in task.type.inputParams" ng-class="{ 'has-error': userForm.name.$invalid }">
+                    <label>{{param}}</label>
+                    <input type="text" ng-model="task.params[param]" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-lg" value="Add task">
+            </div>
+            Task:
+            <pre>{{task|json}}</pre>
+            Response:
+            <pre>{{response|json}}</pre>
+        </form>
     </div>
-    <button type="button" class="btn btn-success">Success</button>
+    <div class="col-sm-8">
+        Tasks:
+        <pre>{{tasks|json}}</pre>
+    </div>
 </div>
 </body>
 </html>

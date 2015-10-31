@@ -50,7 +50,7 @@ public class TaskResource {
         Task task = new Task();
         task.setName(taskRequest.getName());
         task.setParams(taskRequest.getParams());
-        task.setType(storage.getTypeByName(taskRequest.getTaskType()));
+        task.setType(taskRequest.getType());
         task = storage.saveTask(task);
         TaskResponse taskResponse = new TaskResponse();
         taskResponse.setMessage("Success");
@@ -68,14 +68,14 @@ public class TaskResource {
     @Path("/{taskId}/start")
     public TaskStartResponse taskStart(@PathParam("taskId") String taskId, TaskStartRequest request) {
         Task task = storage.getTaskById(taskId);
-        TaskStartResponse response = new TaskStartResponse();
         Run run = mapRequestToRun(request, task);
         ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
         loadGenerator.start(configurationSystem);
         run.setStatus("Running");
         task.getRuns().add(run);
-        response.setMessage("Success");
         storage.updateTaskById(task.getTaskId(), task);
+        TaskStartResponse response = new TaskStartResponse();
+        response.setMessage("Success");
         return response;
     }
 
@@ -83,7 +83,6 @@ public class TaskResource {
     @Path("/{taskId}/stop")
     public TaskStopResponse taskStop(@PathParam("taskId") String taskId) {
         Task task = storage.getTaskById(taskId);
-        TaskStopResponse response = new TaskStopResponse();
         loadGenerator.stop();
         List<Run> runs = task.getRuns();
         for (Run run : runs) {
@@ -93,8 +92,9 @@ public class TaskResource {
             }
         }
         task.setRuns(runs);
-        response.setMessage("Success");
         storage.updateTaskById(taskId, task);
+        TaskStopResponse response = new TaskStopResponse();
+        response.setMessage("Success");
         return response;
     }
 
