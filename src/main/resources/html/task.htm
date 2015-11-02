@@ -28,19 +28,28 @@
             </tbody>
         </table>
         <div class="page-header"><h1>Task manager</h1></div>
-        <form ng-submit="addTask()">
-            <div class="form-group" ng-class="{ 'has-error': userForm.name.$invalid }">
+        <form name="taskForm" ng-submit="addTask()">
+            <div class="form-group" ng-class="{ 'has-error': taskForm.name.$invalid }">
                 <label>Name:</label>
-                <input type="text" ng-model="task.name" class="form-control" required>
+                <input type="text" ng-model="task.name" name="name" class="form-control" ng-trim="false" required >
             </div>
-            <div class="form-group" ng-class="{ 'has-error': userForm.name.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': taskForm.type.$invalid }">
                 <label>Type:</label>
-                <select ng-model="task.type" ng-options="type.name for type in types" class="form-control" required></select>
+                <select ng-model="task.type" ng-options="type.name for type in types" name="type" class="form-control" required></select>
             </div>
             <div ng-show="task.type">
-                <div class="form-group" ng-repeat="param in task.type.inputParams" ng-class="{ 'has-error': userForm.name.$invalid }">
-                    <label>{{param}}</label>
-                    <input type="text" ng-model="task.params[param]" class="form-control" required>
+                <div ng-repeat="param in task.type.inputParams">
+
+                </div>
+                <div ng-repeat="param in task.type.inputParams">
+                    <div ng-if="param == 'url'" class="form-group" ng-class="{ 'has-error': taskForm.{{param}}.$invalid }">
+                        <label>{{param}}</label>
+                        <input type="url"  ng-model="task.params[param]" class="form-control" name="{{param}}" required>
+                    </div>
+                    <div ng-if="param == 'method'" class="form-group" ng-class="{ 'has-error': taskForm.{{param}}.$invalid }">
+                        <label>{{param}}</label>
+                        <select ng-if="param == 'method'" ng-model="task.params[param]" ng-options="method for method in httpMethods" class="form-control" name="{{param}}" required></select>
+                    </div>
                 </div>
             </div>
             <div class="form-group">

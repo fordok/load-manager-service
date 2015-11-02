@@ -26,5 +26,8 @@ var taskController = app.controller('TaskController', function($http,$scope) {
         }, function errorCallback(response) {
             $scope.errors.push({type: "Error", msg: "Can't add task!"})
         });
-    }
+    };
+
+    $scope.httpMethods = ["GET", "POST", "PUT", "DELETE"];
+
 });
