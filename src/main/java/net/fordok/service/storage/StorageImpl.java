@@ -10,8 +10,9 @@ import java.util.*;
  * Created by fordok on 10/8/2015.
  */
 public class StorageImpl implements Storage {
-    private static Map<String,Task> tasks = new HashMap<String,Task>();
-    private static Map<String,Type> types = new HashMap<String,Type>();
+    private static Map<String,Task> tasks = new HashMap<>();
+    private static Map<String,Type> types = new HashMap<>();
+    private static Map<String,Run> runs = new HashMap<>();
 
     public StorageImpl() {
 
@@ -26,6 +27,16 @@ public class StorageImpl implements Storage {
         type.setOutputParams(outputParams);
         types.put(type.getName(), type);
 
+        Type typeDelay = new Type();
+        typeDelay.setName("Delay");
+        List<String> inputParamsDelay = new ArrayList<>();
+        inputParamsDelay.add("delayMin");
+        inputParamsDelay.add("delayMax");
+        typeDelay.setInputParams(inputParamsDelay);
+        types.put(typeDelay.getName(), typeDelay);
+
+        Map<Integer,Task> taskMap = new HashMap<>();
+
         Task task = new Task("test1");
         task.setTaskId(UUID.randomUUID().toString());
         task.setType(type);
@@ -33,27 +44,36 @@ public class StorageImpl implements Storage {
         params.put("url", "http://google.com");
         params.put("method", "GET");
         task.setParams(params);
+        Map<String,String> inputData = new HashMap<>();
+        inputData.put("login", "admin");
+        inputData.put("password", "test");
+        task.setInputData(inputData);
+        Map<String,String> outputData = new HashMap<>();
+        outputData.put("key", "testkey");
+        task.setOutputData(outputData);
+        task.setBody("some body");
+        tasks.put(task.getTaskId(), task);
+        taskMap.put(1, task);
 
         Run run = new Run();
         run.setRunId(UUID.randomUUID().toString());
+        run.setName("Test run");
         run.setInitialCount(1);
+        run.setTotalCount(10);
+        run.setRampUp(1000);
         run.setStatus("Finished");
-        run.setTaskId(task.getTaskId());
         run.setRunId(UUID.randomUUID().toString());
         run.setStartTs(new Date());
         run.setStopTs(new Date());
-        run.setTotalCount(1);
-        run.setPeriod(1000);
-
-        List<Run> runs = new ArrayList<>();
-        runs.add(run);
-        task.setRuns(runs);
-        tasks.put(task.getTaskId(), task);
+        run.setTasks(taskMap);
+        run.setResultId(UUID.randomUUID().toString());
+        run.setRunType("sequence");
+        runs.put(run.getRunId(), run);
     }
 
     @Override
     public List<Task> getTasks() {
-        return new ArrayList<>(tasks.values());
+        return new ArrayList<Task>(tasks.values());
     }
 
     @Override
@@ -64,9 +84,6 @@ public class StorageImpl implements Storage {
     @Override
     public Task saveTask(Task task) {
         task.setTaskId(UUID.randomUUID().toString());
-        if (task.getRuns() == null) {
-            task.setRuns(new ArrayList<Run>());
-        }
         tasks.put(task.getTaskId(), task);
         return task;
     }
@@ -79,7 +96,7 @@ public class StorageImpl implements Storage {
 
     @Override
     public List<Type> getTypes() {
-        return new ArrayList<>(types.values());
+        return new ArrayList<Type>(types.values());
     }
 
     @Override
@@ -96,5 +113,26 @@ public class StorageImpl implements Storage {
     @Override
     public Type updateTypeByName(String typeName, Type changedType) {
         return types.put(typeName, changedType);
+    }
+
+    @Override
+    public List<Run> getRuns() {
+        return new ArrayList<Run>(runs.values());
+    }
+
+    @Override
+    public Run getRunById(String runId) {
+        return runs.get(runId);
+    }
+
+    @Override
+    public Run saveRun(Run run) {
+        run.setRunId(UUID.randomUUID().toString());
+        return runs.put(run.getRunId(), run);
+    }
+
+    @Override
+    public Run updateRunById(String runId, Run changedRun) {
+        return runs.put(runId, changedRun);
     }
 }

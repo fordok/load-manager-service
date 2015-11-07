@@ -1,5 +1,11 @@
-var app = angular.module('taskApp', []);
-var taskController = app.controller('TaskController', function($http,$scope) {
+var app = angular.module('taskApp', ['ngResource']);
+var taskController = app.controller('TaskController', function($http, $scope, $resource) {
+
+    $scope.alerts = [];
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+    };
 
     $scope.loadData = function() {
         $http.get('http://localhost:8080/api/tasks').
@@ -13,19 +19,14 @@ var taskController = app.controller('TaskController', function($http,$scope) {
     };
 
     $scope.loadData();
-
     $scope.addTask = function(){
-        $http({
-            method: 'POST',
-            url: 'http://localhost:8080/api/tasks',
-            data: $scope.task
-        }).then(function successCallback(response) {
-            $scope.response = response.data;
+        var NewTask = $resource('http://localhost:8080/api/tasks');
+        NewTask.save($scope.task, function(task) {
+            $scope.alerts.push({type: "success", msg: "Task was added"});
             $scope.loadData();
             $scope.task = {};
-        }, function errorCallback(response) {
-            $scope.errors.push({type: "Error", msg: "Can't add task!"})
         });
+
     };
 
     $scope.httpMethods = ["GET", "POST", "PUT", "DELETE"];

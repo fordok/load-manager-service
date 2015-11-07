@@ -43,6 +43,7 @@ run:
 	tasks[](map)
 	start_ts
 	end_ts
+	result_id
 result:
 	result_id
 	run_id
@@ -102,30 +103,22 @@ Task Response example:
   "taskId" : "2729a247-4406-4b58-a1cb-8f42c53b2f91"
 }
 	
-Task start request:
-	initial_count
-	total_count
-	rampup
-	period
-	start_ts	
-	end_ts
-	
-Task start response:
+
+Run Request:
+    name
+    initial_count
+    total_count
+    ramp_up
+    run_type (sequence/random)
+    tasks[](map)
+    start_ts
+    end_ts
+
+Run Response:
 	message
-	task_run_id
+	runId
+	resultId
 	status
-	result_id
-
-Task start request:
-
-{
-  "initialCount" : "1",
-  "totalCount" : "1",
-  "rampUp" : "0",
-  "period" : "1000",
-  "startTs" : null,
-  "stopTs" : null
-}
 	
 Features:
 	Multitasking

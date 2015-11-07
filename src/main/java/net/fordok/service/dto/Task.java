@@ -8,14 +8,6 @@ import java.util.Map;
  */
 public class Task {
 
-//    task_id
-//            name
-//    type_name
-//    params[](map)
-//    body
-//    inputData[](map)
-//            outputData[](map)
-
     private String name;
     private String taskId;
     private Type type;

@@ -27,11 +27,9 @@ import java.util.UUID;
 public class TaskResource {
 
     private final Storage storage;
-    private final LoadGenerator loadGenerator;
 
-    public TaskResource(Storage storage, LoadGenerator loadGenerator) {
+    public TaskResource(Storage storage) {
         this.storage = storage;
-        this.loadGenerator = loadGenerator;
     }
 
     @GET
@@ -47,10 +45,13 @@ public class TaskResource {
 
     @POST
     public TaskResponse createTask(TaskRequest taskRequest){
+        System.out.println(taskRequest);
         Task task = new Task();
         task.setName(taskRequest.getName());
         task.setParams(taskRequest.getParams());
         task.setType(taskRequest.getType());
+        task.setInputData(taskRequest.getInputData());
+        task.setOutputData(taskRequest.getOutputData());
         task = storage.saveTask(task);
         TaskResponse taskResponse = new TaskResponse();
         taskResponse.setMessage("Success");
@@ -64,69 +65,69 @@ public class TaskResource {
         return storage.updateTaskById(taskId, changedTask);
     }
 
-    @PUT
-    @Path("/{taskId}/start")
-    public TaskStartResponse taskStart(@PathParam("taskId") String taskId, TaskStartRequest request) {
-        Task task = storage.getTaskById(taskId);
-        Run run = mapRequestToRun(request, task);
-        ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
-        loadGenerator.start(configurationSystem);
-        run.setStatus("Running");
-        task.getRuns().add(run);
-        storage.updateTaskById(task.getTaskId(), task);
-        TaskStartResponse response = new TaskStartResponse();
-        response.setMessage("Success");
-        return response;
-    }
+//    @PUT
+//    @Path("/{taskId}/start")
+//    public TaskStartResponse taskStart(@PathParam("taskId") String taskId, TaskStartRequest request) {
+//        Task task = storage.getTaskById(taskId);
+//        Run run = mapRequestToRun(request, task);
+//        ConfigurationSystem configurationSystem = extractTaskConfiguration(task, request);
+//        loadGenerator.start(configurationSystem);
+//        run.setStatus("Running");
+//        task.getRuns().add(run);
+//        storage.updateTaskById(task.getTaskId(), task);
+//        TaskStartResponse response = new TaskStartResponse();
+//        response.setMessage("Success");
+//        return response;
+//    }
+//
+//    @PUT
+//    @Path("/{taskId}/stop")
+//    public TaskStopResponse taskStop(@PathParam("taskId") String taskId) {
+//        Task task = storage.getTaskById(taskId);
+//        loadGenerator.stop();
+//        List<Run> runs = task.getRuns();
+//        for (Run run : runs) {
+//            if (run.getStatus().equals("Running")) {
+//                run.setStopTs(new Date());
+//                run.setStatus("Finished");
+//            }
+//        }
+//        task.setRuns(runs);
+//        storage.updateTaskById(taskId, task);
+//        TaskStopResponse response = new TaskStopResponse();
+//        response.setMessage("Success");
+//        return response;
+//    }
+//
+//    private Run mapRequestToRun(TaskStartRequest request, Task task) {
+//        Run run = new Run();
+//        run.setInitialCount(request.getInitialCount());
+//        run.setTotalCount(request.getTotalCount());
+//        run.setPeriod(request.getPeriod());
+//        run.setRampUp(request.getRampUp());
+//        if (request.getStartTs() == null) {
+//            run.setStartTs(new Date());
+//        } else {
+//            run.setStartTs(request.getStartTs());
+//        }
+//        run.setStopTs(request.getStopTs());
+//        run.setTaskId(task.getTaskId());
+//        run.setRunId(UUID.randomUUID().toString());
+//        return run;
+//    }
 
-    @PUT
-    @Path("/{taskId}/stop")
-    public TaskStopResponse taskStop(@PathParam("taskId") String taskId) {
-        Task task = storage.getTaskById(taskId);
-        loadGenerator.stop();
-        List<Run> runs = task.getRuns();
-        for (Run run : runs) {
-            if (run.getStatus().equals("Running")) {
-                run.setStopTs(new Date());
-                run.setStatus("Finished");
-            }
-        }
-        task.setRuns(runs);
-        storage.updateTaskById(taskId, task);
-        TaskStopResponse response = new TaskStopResponse();
-        response.setMessage("Success");
-        return response;
-    }
-
-    private Run mapRequestToRun(TaskStartRequest request, Task task) {
-        Run run = new Run();
-        run.setInitialCount(request.getInitialCount());
-        run.setTotalCount(request.getTotalCount());
-        run.setPeriod(request.getPeriod());
-        run.setRampUp(request.getRampUp());
-        if (request.getStartTs() == null) {
-            run.setStartTs(new Date());
-        } else {
-            run.setStartTs(request.getStartTs());
-        }
-        run.setStopTs(request.getStopTs());
-        run.setTaskId(task.getTaskId());
-        run.setRunId(UUID.randomUUID().toString());
-        return run;
-    }
-
-    private ConfigurationSystem extractTaskConfiguration(Task task, TaskStartRequest request) {
-        ConfigurationSystem configurationSystem = new ConfigurationSystem();
-        configurationSystem.setWorkersCount(request.getTotalCount());
-        configurationSystem.setPeriod(request.getPeriod());
-        Work work = null;
-        if (task.getType() != null) {
-            Type type = task.getType();
-            if (type.getName().equals("Http")) {
-                work = new HttpWork(task.getParams());
-            }
-        }
-        configurationSystem.setWork(work);
-        return configurationSystem;
-    }
+//    private ConfigurationSystem extractTaskConfiguration(Task task, TaskStartRequest request) {
+//        ConfigurationSystem configurationSystem = new ConfigurationSystem();
+//        configurationSystem.setWorkersCount(request.getTotalCount());
+//        configurationSystem.setPeriod(request.getPeriod());
+//        Work work = null;
+//        if (task.getType() != null) {
+//            Type type = task.getType();
+//            if (type.getName().equals("Http")) {
+//                work = new HttpWork(task.getParams());
+//            }
+//        }
+//        configurationSystem.setWork(work);
+//        return configurationSystem;
+//    }
 }

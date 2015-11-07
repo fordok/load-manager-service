@@ -8,9 +8,12 @@ import java.util.Map;
  * Created by fordok on 10/25/2015.
  */
 public class TaskRequest {
+
     private String name;
     private Type type;
     private Map<String,String> params;
+    private Map<String,String> inputData;
+    private Map<String,String> outputData;
 
     public TaskRequest() {
     }
@@ -37,5 +40,32 @@ public class TaskRequest {
 
     public void setParams(Map<String, String> params) {
         this.params = params;
+    }
+
+    public Map<String, String> getInputData() {
+        return inputData;
+    }
+
+    public void setInputData(Map<String, String> inputData) {
+        this.inputData = inputData;
+    }
+
+    public Map<String, String> getOutputData() {
+        return outputData;
+    }
+
+    public void setOutputData(Map<String, String> outputData) {
+        this.outputData = outputData;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskRequest{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                ", params=" + params +
+                ", inputData=" + inputData +
+                ", outputData=" + outputData +
+                '}';
     }
 }

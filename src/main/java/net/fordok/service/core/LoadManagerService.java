@@ -38,10 +38,12 @@ public class LoadManagerService extends Application<ServiceConfiguration> {
 
     @Override
     public void run(ServiceConfiguration serviceConfiguration, Environment environment) throws Exception {
-        final TaskResource taskResource = new TaskResource(storage, loadGenerator);
+        final TaskResource taskResource = new TaskResource(storage);
         environment.jersey().register(taskResource);
         final TypeResource typeResource = new TypeResource(storage);
         environment.jersey().register(typeResource);
+        final RunResource runResource = new RunResource(storage, loadGenerator);
+        environment.jersey().register(runResource);
         ObjectMapper mapper = environment.getObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }

@@ -1,35 +1,25 @@
-package net.fordok.service.dto;
+package net.fordok.service.service;
+
+import net.fordok.service.dto.Task;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
- * Created by fordok on 10/25/2015.
+ * Created by fordok on 11/7/2015.
  */
-public class Run {
+public class RunRequest {
 
-    private String runId;
     private String name;
-    private String status;
     private int initialCount;
     private int totalCount;
     private int rampUp;
-    private String runType;
+    private String runYype;
     private Map<Integer,Task> tasks;
     private Date startTs;
     private Date stopTs;
-    private String resultId;
 
-    public Run() {
-    }
-
-    public String getRunId() {
-        return runId;
-    }
-
-    public void setRunId(String runId) {
-        this.runId = runId;
+    public RunRequest() {
     }
 
     public String getName() {
@@ -38,14 +28,6 @@ public class Run {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public int getInitialCount() {
@@ -72,12 +54,12 @@ public class Run {
         this.rampUp = rampUp;
     }
 
-    public String getRunType() {
-        return runType;
+    public String getRunYype() {
+        return runYype;
     }
 
-    public void setRunType(String runType) {
-        this.runType = runType;
+    public void setRunYype(String runYype) {
+        this.runYype = runYype;
     }
 
     public Map<Integer, Task> getTasks() {
@@ -102,13 +84,5 @@ public class Run {
 
     public void setStopTs(Date stopTs) {
         this.stopTs = stopTs;
-    }
-
-    public String getResultId() {
-        return resultId;
-    }
-
-    public void setResultId(String resultId) {
-        this.resultId = resultId;
     }
 }
