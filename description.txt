@@ -1,19 +1,26 @@
 API:
 
-+tasks/								              GET/POST
-+tasks/{taskId}							        GET/PUT/DELETE
-+tasks/{taskId}/start						    PUT
-tasks/{taskId}/runs/						    GET
-tasks/{taskId}/runs/{taskRunId}		  GET/PUT
-tasks/{taskId}/results						  GET
-tasks/{taskId}/results/{resultId}		GET
 +types/							            GET/POST
 +types/{typeName}					  GET/PUT/DELETE
++tasks/								              GET/POST
++tasks/{taskId}							        GET/PUT/DELETE
+runs								  GET/POST
+runs/{runId}					  GET/PUT/DELETE
+runs/{runId}/copy				  PUT
+runs/{runId}/start			  PUT
+runs/{runId}/stop				  PUT
+runs/{runId}/results
+runs/{runId}/results/{resultId}
 machines							              GET/POST
 machines/{machines-id}						  GET/PUT/DELETE
 
+
+Types:
+	Protocols : Http, JMS, SOAP, WebSockets
+	Workflow: Delay, If-Else, For-Loop, Random
+
 Entities:
-type:
+task_type:
 	name
 	input_params[](list)
 	output_params[](list)
@@ -21,21 +28,24 @@ task:
 	task_id
 	name
 	type_name
-	input_params[](map)
-	task_runs[]
-task_run:	
+	params[](map)
+	body
+	inputData[](map)
+	outputData[](map)
+run:
+	run_id
+	name
 	status
-	task_run_id	
-	task_id
-	result_id
 	initial_count
 	total_count
-	period
-	rampup
+	ramp_up
+	run_type (sequence/random)
+	tasks[](map)
 	start_ts
 	end_ts
 result:
 	result_id
+	run_id
 	output_params[](map)
 
 Type Request:
@@ -62,6 +72,8 @@ Task Request:
 	name
 	task_type
 	params
+	inputData
+	outputData
 	
 Task Response:
 	message
@@ -70,10 +82,17 @@ Task Response:
 Task Request example:
 {
   "name" : "new_task",
-  "taskType" : "Http",
+  "type" : "Http",
   "params" : {
     "method" : "GET",
     "url" : "http://google.com"
+  },
+  "inputData" : {
+    "login" : "admin",
+    "password" : "test"
+  },
+  "outputData" : {
+    "token" : "test"
   }
 }
 

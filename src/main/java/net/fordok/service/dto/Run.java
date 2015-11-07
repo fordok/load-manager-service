@@ -1,6 +1,8 @@
 package net.fordok.service.dto;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by fordok on 10/25/2015.
@@ -8,13 +10,13 @@ import java.util.Date;
 public class Run {
 
     private String runId;
-    private String taskId;
-    private String resultId;
+    private String name;
     private String status;
     private int initialCount;
     private int totalCount;
-    private int period;
     private int rampUp;
+    private String runType;
+    private Map<Integer,Task> tasks;
     private Date startTs;
     private Date stopTs;
 
@@ -29,20 +31,12 @@ public class Run {
         this.runId = runId;
     }
 
-    public String getTaskId() {
-        return taskId;
+    public String getName() {
+        return name;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
-    }
-
-    public String getResultId() {
-        return resultId;
-    }
-
-    public void setResultId(String resultId) {
-        this.resultId = resultId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStatus() {
@@ -69,20 +63,28 @@ public class Run {
         this.totalCount = totalCount;
     }
 
-    public int getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(int period) {
-        this.period = period;
-    }
-
     public int getRampUp() {
         return rampUp;
     }
 
     public void setRampUp(int rampUp) {
         this.rampUp = rampUp;
+    }
+
+    public String getRunType() {
+        return runType;
+    }
+
+    public void setRunType(String runType) {
+        this.runType = runType;
+    }
+
+    public Map<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Map<Integer, Task> tasks) {
+        this.tasks = tasks;
     }
 
     public Date getStartTs() {

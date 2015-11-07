@@ -8,11 +8,21 @@ import java.util.Map;
  */
 public class Task {
 
+//    task_id
+//            name
+//    type_name
+//    params[](map)
+//    body
+//    inputData[](map)
+//            outputData[](map)
+
     private String name;
     private String taskId;
     private Type type;
-    private Map<String,String> params;
-    private List<Run> runs;
+    private Map<String, String> params;
+    private Map<String, String> inputData;
+    private Map<String, String> outputData;
+    private String body;
 
     public Task() {
     }
@@ -53,11 +63,27 @@ public class Task {
         this.params = params;
     }
 
-    public List<Run> getRuns() {
-        return runs;
+    public Map<String, String> getInputData() {
+        return inputData;
     }
 
-    public void setRuns(List<Run> runs) {
-        this.runs = runs;
+    public void setInputData(Map<String, String> inputData) {
+        this.inputData = inputData;
+    }
+
+    public Map<String, String> getOutputData() {
+        return outputData;
+    }
+
+    public void setOutputData(Map<String, String> outputData) {
+        this.outputData = outputData;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 }
