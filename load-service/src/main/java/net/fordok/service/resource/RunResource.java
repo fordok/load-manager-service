@@ -5,6 +5,7 @@ import net.fordok.generator.core.LoadGenerator;
 import net.fordok.service.dto.Run;
 import net.fordok.service.service.RunRequest;
 import net.fordok.service.service.RunResponse;
+import net.fordok.service.service.RunActionResponse;
 import net.fordok.service.storage.Storage;
 
 import javax.ws.rs.*;
@@ -57,6 +58,40 @@ public class RunResource {
         response.setRunId(run.getRunId());
         response.setResultId(UUID.randomUUID().toString());
         return response;
+    }
+
+    @GET
+    @Path("/{runId}/start")
+    public RunActionResponse start(@PathParam("runId") String runId) {
+        Run run = storage.getRunById(runId);
+        RunActionResponse response = new RunActionResponse();
+        if (run == null) {
+            response.setMessage("error");
+            return response;
+        } else {
+            loadGenerator.start(run);
+            run.setStatus("Running");
+            response.setMessage("success");
+            response.setResultId(UUID.randomUUID().toString());
+            return response;
+        }
+    }
+
+    @GET
+    @Path("/{runId}/stop")
+    public RunActionResponse stop(@PathParam("runId") String runId) {
+        Run run = storage.getRunById(runId);
+        RunActionResponse response = new RunActionResponse();
+        if (run == null) {
+            response.setMessage("error");
+            return response;
+        } else {
+            loadGenerator.stop();
+            run.setStatus("Finished");
+            response.setMessage("success");
+            response.setResultId(UUID.randomUUID().toString());
+            return response;
+        }
     }
 
     @PUT

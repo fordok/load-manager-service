@@ -1,6 +1,6 @@
 package net.fordok.generator.core;
 
-import net.fordok.generator.configuration.ConfigurationSystem;
+import net.fordok.service.dto.Run;
 
 /**
  * User: Fordok
@@ -9,6 +9,6 @@ import net.fordok.generator.configuration.ConfigurationSystem;
  */
 public interface LoadGenerator {
     void init();
-    void start(ConfigurationSystem confSystem);
+    void start(Run run);
     void stop();
 }

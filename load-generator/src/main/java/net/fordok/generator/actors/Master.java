@@ -6,9 +6,8 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import net.fordok.generator.configuration.ConfigurationSystem;
-import net.fordok.generator.configuration.ConfigurationWorker;
 import net.fordok.generator.messages.CommandsManage;
+import net.fordok.service.dto.Run;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public class Master extends UntypedActor {
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
     private List<ActorRef> workers = new ArrayList<ActorRef>();
     private ActorRef stats = null;
-    private ConfigurationSystem conf = null;
 
     @Override
     public void preStart() throws Exception {
@@ -33,16 +31,14 @@ public class Master extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         log.info("Received : " + message);
-        if (message instanceof ConfigurationSystem) {
-            conf = (ConfigurationSystem)message;
-            killAndClearWorkers();
-            for (int i = 1; i <= conf.getWorkersCount(); i++) {
-                ConfigurationWorker confWorker = new ConfigurationWorker(conf.getPeriod(), conf.getWork(), stats);
-                workers.add(getContext().actorOf(Props.create(Worker.class, i, confWorker)));
-            }
-        } else if (message instanceof CommandsManage) {
-            for (ActorRef worker : workers) {
-                worker.tell(message, getSelf());
+        if (message instanceof CommandsManage) {
+            if (message instanceof CommandsManage.Start) {
+                Run run = ((CommandsManage.Start) message).getRun();
+                killAndClearWorkers();
+                for (int i = 1; i <= run.getTotalCount(); i++) {
+                    ActorRef worker = getContext().actorOf(Props.create(Worker.class, i, run, stats));
+                    workers.add(worker);
+                }
             }
             if (message instanceof CommandsManage.Stop) {
                 killAndClearWorkers();

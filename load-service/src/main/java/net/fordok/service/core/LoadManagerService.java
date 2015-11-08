@@ -13,7 +13,6 @@ import net.fordok.service.configuration.ServiceConfiguration;
 import net.fordok.service.resource.*;
 import net.fordok.service.storage.Storage;
 import net.fordok.service.storage.StorageImpl;
-import net.fordok.generator.work.HttpWork;
 
 /**
  * Created by fordok on 7/4/2015.

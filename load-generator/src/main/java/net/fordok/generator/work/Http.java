@@ -15,14 +15,14 @@ import java.util.Map;
  * Date: 2/15/2015
  * Time: 6:55 PM
  */
-public class HttpWork implements Work {
+public class Http implements Work {
 
-    private static Logger log = LoggerFactory.getLogger(HttpWork.class);
+    private static Logger log = LoggerFactory.getLogger(Http.class);
 
-    private final Map<String, String> inputParams;
+    private final Map<String, String> params;
 
-    public HttpWork(Map<String, String> inputParams) {
-        this.inputParams = inputParams;
+    public Http(Map<String, String> inputParams) {
+        this.params = inputParams;
     }
 
     @Override
@@ -30,9 +30,9 @@ public class HttpWork implements Work {
         WorkResult result = new WorkResult(this.getClass().getSimpleName());
         try {
             result.setStartTs(System.currentTimeMillis());
-            URL obj = new URL(inputParams.get("url"));
+            URL obj = new URL(params.get("url"));
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod(inputParams.get("method"));
+            con.setRequestMethod(params.get("method"));
             int responseCode = con.getResponseCode();
             Map<String,String> output = new HashMap<>();
             output.put("code", String.valueOf(responseCode));

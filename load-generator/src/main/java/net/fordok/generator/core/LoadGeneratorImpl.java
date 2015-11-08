@@ -4,8 +4,8 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import net.fordok.generator.actors.Master;
-import net.fordok.generator.configuration.ConfigurationSystem;
 import net.fordok.generator.messages.CommandsManage;
+import net.fordok.service.dto.Run;
 
 /**
  * User: Fordok
@@ -24,9 +24,8 @@ public class LoadGeneratorImpl implements LoadGenerator {
     }
 
     @Override
-    public void start(ConfigurationSystem confSystem) {
-        master.tell(confSystem, ActorRef.noSender());
-        master.tell(new CommandsManage.Start(), ActorRef.noSender());
+    public void start(Run run) {
+        master.tell(new CommandsManage.Start(run), ActorRef.noSender());
     }
 
     @Override
