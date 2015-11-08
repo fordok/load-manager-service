@@ -1,2 +1,2 @@
-# load-manager-service
-REST service for managing of load generator
+# load-manager-net.fordok.service
+REST net.fordok.service for managing of load generator
