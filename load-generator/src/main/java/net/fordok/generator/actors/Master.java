@@ -7,10 +7,14 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import net.fordok.generator.messages.CommandsManage;
+import net.fordok.generator.work.Delay;
+import net.fordok.generator.work.Http;
+import net.fordok.generator.work.Work;
 import net.fordok.service.dto.Run;
+import net.fordok.service.dto.Task;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: Fordok
@@ -20,7 +24,8 @@ import java.util.List;
 public class Master extends UntypedActor {
 
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-    private List<ActorRef> workers = new ArrayList<ActorRef>();
+    private List<ActorRef> workers = new ArrayList<>();
+    private Map<Integer,Work> workList = new HashMap<>();
     private ActorRef stats = null;
 
     @Override
@@ -35,14 +40,26 @@ public class Master extends UntypedActor {
             if (message instanceof CommandsManage.Start) {
                 Run run = ((CommandsManage.Start) message).getRun();
                 killAndClearWorkers();
+                run.getTasks().forEach((index, task) -> workList.put(index, convertTaskToWork(task)));
+                workList.forEach((integer, work) -> System.out.println(work));
                 for (int i = 1; i <= run.getTotalCount(); i++) {
-                    ActorRef worker = getContext().actorOf(Props.create(Worker.class, i, run, stats));
+                    ActorRef worker = getContext().actorOf(Props.create(Worker.class, i, workList, stats));
                     workers.add(worker);
                 }
             }
             if (message instanceof CommandsManage.Stop) {
                 killAndClearWorkers();
             }
+        }
+    }
+
+    private Work convertTaskToWork(Task task) {
+        if (task.getType().getName().equals("Http")) {
+            return new Http(task.getParams());
+        } else if (task.getType().getName().equals("Delay")) {
+            return new Delay(task.getParams());
+        } else {
+            return null;
         }
     }
 

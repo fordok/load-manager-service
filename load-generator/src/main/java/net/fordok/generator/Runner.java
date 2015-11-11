@@ -56,8 +56,19 @@ public class Runner {
         outputData.put("key", "testkey");
         task.setOutputData(outputData);
         task.setBody("some body");
+
+        Task taskDelay = new Task("test1");
+        taskDelay.setTaskId(UUID.randomUUID().toString());
+        taskDelay.setType(typeDelay);
+        Map<String,String> paramsDelay = new HashMap<>();
+        paramsDelay.put("delayMin", "1000");
+        paramsDelay.put("delayMax", "1000");
+        taskDelay.setParams(paramsDelay);
+
         tasks.put(task.getTaskId(), task);
         taskMap.put(1, task);
+        tasks.put(taskDelay.getTaskId(), taskDelay);
+        taskMap.put(2, taskDelay);
 
         Run run = new Run();
         run.setRunId(UUID.randomUUID().toString());
@@ -74,16 +85,10 @@ public class Runner {
         run.setRunType("sequence");
         runs.put(run.getRunId(), run);
 
-
         LoadGenerator loadGenerator = new LoadGeneratorImpl();
-//        Map<String, String> inputParams = new HashMap<>();
-//        inputParams.put("url", "http://google.com");
-//        inputParams.put("method", "GET");
-
         loadGenerator.init();
         loadGenerator.start(run);
         Thread.sleep(30000);
-
         loadGenerator.stop();
     }
 }

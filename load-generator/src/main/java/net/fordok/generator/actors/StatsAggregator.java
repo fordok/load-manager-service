@@ -18,7 +18,7 @@ public class StatsAggregator extends UntypedActor {
     public void onReceive(Object message) throws Exception {
         if (message instanceof WorkResult) {
             WorkResult result = (WorkResult)message;
-            log.info("Received : " + (WorkResult)message + " lag : " + (result.getEndTs() - result.getStartTs()));
+            log.info("Received : " + message + " lag : " + (result.getEndTs() - result.getStartTs()));
         }
     }
 }

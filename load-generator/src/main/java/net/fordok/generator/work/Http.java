@@ -19,9 +19,9 @@ public class Http implements Work {
 
     private static Logger log = LoggerFactory.getLogger(Http.class);
 
-    private final Map<String, String> params;
+    private final Map<String,String> params;
 
-    public Http(Map<String, String> inputParams) {
+    public Http(Map<String,String> inputParams) {
         this.params = inputParams;
     }
 

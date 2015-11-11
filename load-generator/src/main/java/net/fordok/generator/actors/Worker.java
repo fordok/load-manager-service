@@ -15,6 +15,7 @@ import net.fordok.service.dto.Task;
 import scala.concurrent.duration.Duration;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,18 +27,17 @@ public class Worker extends UntypedActor {
 
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
     private Cancellable scheduler = null;
-    private Run run = null;
+    private Map<Integer,Work> workList = null;
     private ActorRef stats = null;
     private int taskIndex = 1;
-
     private int id;
 
-    public Worker(int id, Run run, ActorRef stats) {
+    public Worker(int id, Map<Integer,Work> workList, ActorRef stats) {
         this.id = id;
-        this.run = run;
+        this.workList = workList;
         this.stats = stats;
         log.info("Worker with id : " + id + " was created");
-        doWork();
+        doWork(getNextWork());
     }
 
     @Override
@@ -45,21 +45,21 @@ public class Worker extends UntypedActor {
         if (message instanceof WorkResult) {
             getSender().tell(PoisonPill.getInstance(), getSelf());
             stats.tell(message, getSelf());
-            if (taskIndex == run.getTasks().size()) {
-                taskIndex = 1;
-            } else {
-                taskIndex++;
-            }
-            doWork();
-        } else if (message.equals("Tick")) {
-            doWork();
+            doWork(getNextWork());
         }
     }
 
-    private void doWork() {
-        Task task = run.getTasks().get(taskIndex);
+    private Work getNextWork() {
+        if (taskIndex == workList.size()) {
+            taskIndex = 1;
+        } else {
+            taskIndex++;
+        }
+        return workList.get(taskIndex);
+    }
+
+    private void doWork(Work work) {
         ActorRef executor = getContext().actorOf(Props.create(WorkerExecutor.class));
-        Work work = convertTaskToWork(task);
         if (work == null) {
             log.debug("work is null!!!!");
         } else {
@@ -67,32 +67,13 @@ public class Worker extends UntypedActor {
         }
     }
 
-    private Work convertTaskToWork(Task task) {
-        if (task.getType().getName().equals("Http")) {
-            return new Http(task.getParams());
-        } else if (task.getType().getName().equals("Delay")) {
-            return new Delay(task.getParams());
-        } else {
-            return null;
-        }
-    }
-
-    private Cancellable initSchedulerWithPeriod(long period) {
-        return getContext().system().scheduler().schedule(Duration.Zero(),
-                Duration.create(period, TimeUnit.MILLISECONDS), getSelf(), "Tick",
-                getContext().system().dispatcher(), null);
-    }
-
     private static SupervisorStrategy strategy = new OneForOneStrategy(10,
             Duration.create("1 minute"),
-            new Function<Throwable, SupervisorStrategy.Directive>() {
-                @Override
-                public SupervisorStrategy.Directive apply(Throwable t) {
-                    if (t instanceof IOException) {
-                        return SupervisorStrategy.stop();
-                    } else {
-                        return SupervisorStrategy.escalate();
-                    }
+            t -> {
+                if (t instanceof IOException) {
+                    return SupervisorStrategy.stop();
+                } else {
+                    return SupervisorStrategy.escalate();
                 }
             }
     );

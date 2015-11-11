@@ -4,6 +4,7 @@ import net.fordok.generator.messages.WorkResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,6 +22,16 @@ public class Delay implements Work {
 
     @Override
     public WorkResult doWork() {
-        return null;
+        WorkResult result = new WorkResult(this.getClass().getSimpleName());
+        result.setStartTs(System.currentTimeMillis());
+        int delayMin = Integer.parseInt(params.get("delayMin"));
+        int delayMax = Integer.parseInt(params.get("delayMax"));
+        Map<String,String> output = new HashMap<>();
+        if (delayMin == delayMax) {
+            output.put("delay", String.valueOf(delayMin));
+        }
+        result.setOutput(output);
+        result.setEndTs(System.currentTimeMillis());
+        return result;
     }
 }

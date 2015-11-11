@@ -52,8 +52,19 @@ public class StorageImpl implements Storage {
         outputData.put("key", "testkey");
         task.setOutputData(outputData);
         task.setBody("some body");
+
+        Task taskDelay = new Task("test1");
+        taskDelay.setTaskId(UUID.randomUUID().toString());
+        taskDelay.setType(type);
+        Map<String,String> paramsDelay = new HashMap<>();
+        paramsDelay.put("delayMin", "1000");
+        paramsDelay.put("delayMax", "1000");
+        taskDelay.setParams(paramsDelay);
+
         tasks.put(task.getTaskId(), task);
         taskMap.put(1, task);
+        tasks.put(taskDelay.getTaskId(), taskDelay);
+        taskMap.put(2, taskDelay);
 
         Run run = new Run();
         run.setRunId(UUID.randomUUID().toString());

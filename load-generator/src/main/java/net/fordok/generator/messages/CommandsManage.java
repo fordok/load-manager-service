@@ -20,8 +20,6 @@ public class CommandsManage implements Serializable {
         public Run getRun() {
             return run;
         }
-    };
-    public static final class Stop extends CommandsManage{};
-    public static final class Suspend extends CommandsManage{};
-    public static final class Resume extends CommandsManage{};
+    }
+    public static final class Stop extends CommandsManage{}
 }

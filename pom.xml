@@ -16,10 +16,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.7</jdk.version>
+        <jdk.version>1.8</jdk.version>
         <scala.version>2.11.4</scala.version>
-        <akka.version>2.3.8</akka.version>
-        <spring.version>4.0.2.RELEASE</spring.version>
+        <akka.version>2.4.0</akka.version>
     </properties>
 
     <build>
