@@ -41,7 +41,6 @@ public class Master extends UntypedActor {
                 Run run = ((CommandsManage.Start) message).getRun();
                 killAndClearWorkers();
                 run.getTasks().forEach((index, task) -> workList.put(index, convertTaskToWork(task)));
-                workList.forEach((integer, work) -> System.out.println(work));
                 for (int i = 1; i <= run.getTotalCount(); i++) {
                     ActorRef worker = getContext().actorOf(Props.create(Worker.class, i, workList, stats));
                     workers.add(worker);
