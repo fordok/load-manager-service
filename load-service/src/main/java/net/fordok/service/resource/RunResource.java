@@ -12,6 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * Created by fordok on 11/7/2015.
@@ -63,31 +64,33 @@ public class RunResource {
     @GET
     @Path("/{runId}/start")
     public RunActionResponse start(@PathParam("runId") String runId) {
-        Run run = storage.getRunById(runId);
-        RunActionResponse response = new RunActionResponse();
-        if (run == null) {
-            response.setMessage("error");
-            return response;
-        } else {
+        Function<Run,Run> startFunc = run -> {
             loadGenerator.start(run);
             run.setStatus("Running");
-            response.setMessage("success");
-            response.setResultId(UUID.randomUUID().toString());
-            return response;
-        }
+            return run;
+        };
+        return makeRunAction(runId, startFunc);
     }
 
     @GET
     @Path("/{runId}/stop")
     public RunActionResponse stop(@PathParam("runId") String runId) {
+        Function<Run,Run> stopFunc = run -> {
+            loadGenerator.stop();
+            run.setStatus("Finished");
+            return run;
+        };
+        return makeRunAction(runId, stopFunc);
+    }
+
+    private RunActionResponse makeRunAction(String runId, Function function) {
         Run run = storage.getRunById(runId);
         RunActionResponse response = new RunActionResponse();
         if (run == null) {
             response.setMessage("error");
             return response;
         } else {
-            loadGenerator.stop();
-            run.setStatus("Finished");
+            function.apply(run);
             response.setMessage("success");
             response.setResultId(UUID.randomUUID().toString());
             return response;

@@ -55,7 +55,7 @@ public class StorageImpl implements Storage {
 
         Task taskDelay = new Task("test1");
         taskDelay.setTaskId(UUID.randomUUID().toString());
-        taskDelay.setType(type);
+        taskDelay.setType(typeDelay);
         Map<String,String> paramsDelay = new HashMap<>();
         paramsDelay.put("delayMin", "1000");
         paramsDelay.put("delayMax", "1000");
