@@ -3,59 +3,45 @@ package net.fordok.generator.actors;
 import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import akka.japi.Function;
-import net.fordok.generator.configuration.ConfigurationWorker;
-import net.fordok.generator.messages.CommandsManage;
 import net.fordok.generator.messages.WorkResult;
-import net.fordok.generator.work.Delay;
-import net.fordok.generator.work.Http;
+import net.fordok.generator.messages.WorkRun;
 import net.fordok.generator.work.Work;
-import net.fordok.service.dto.Run;
-import net.fordok.service.dto.Task;
 import scala.concurrent.duration.Duration;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * User: Fordok
- * Date: 1/3/2015
- * Time: 2:50 PM
+ * Created by fordok on 11/14/2015.
  */
-public class Worker extends UntypedActor {
+public class WorkerScheduler extends UntypedActor {
 
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-    private Cancellable scheduler = null;
-    private Map<Integer,Work> workList = null;
+
+    private WorkRun workRun = null;
     private ActorRef stats = null;
-    private int taskIndex = 1;
+    private Cancellable scheduler = null;
     private int id;
 
-    public Worker(int id, Map<Integer,Work> workList, ActorRef stats) {
+    public WorkerScheduler(int id, WorkRun workRun, ActorRef stats) {
         this.id = id;
-        this.workList = workList;
         this.stats = stats;
-        log.info("Worker with id : " + id + " was created");
-        doWork(getNextWork());
+        this.workRun = workRun;
+        log.info("WorkerScheduler with id : " + id + " was created, run params : " + workRun.getRunParams() + " work list : " + workRun.getWorkList());
+        scheduler = initSchedulerWithPeriod(Integer.valueOf(workRun.getRunParams().get("periodMin")));
     }
 
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof WorkResult) {
-            getSender().tell(PoisonPill.getInstance(), getSelf());
-            stats.tell(message, getSelf());
-            doWork(getNextWork());
+            if (message instanceof WorkResult) {
+                getSender().tell(PoisonPill.getInstance(), getSelf());
+                stats.tell(message, getSelf());
+            }
+        } else if (message.equals("Tick")) {
+            //todo make complicated get
+            doWork(workRun.getWorkList().values().iterator().next());
         }
-    }
-
-    private Work getNextWork() {
-        if (taskIndex == workList.size()) {
-            taskIndex = 1;
-        } else {
-            taskIndex++;
-        }
-        return workList.get(taskIndex);
     }
 
     private void doWork(Work work) {
@@ -81,5 +67,11 @@ public class Worker extends UntypedActor {
     @Override
     public SupervisorStrategy supervisorStrategy() {
         return strategy;
+    }
+
+    private Cancellable initSchedulerWithPeriod(long period) {
+        return getContext().system().scheduler().schedule(Duration.Zero(),
+                Duration.create(period, TimeUnit.MILLISECONDS), getSelf(), "Tick",
+                getContext().system().dispatcher(), null);
     }
 }

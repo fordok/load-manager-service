@@ -1,7 +1,6 @@
 package net.fordok.service.dto;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,7 +15,7 @@ public class Run {
     private int totalCount;
     private int rampUp;
     private String runType;
-    private Map<Integer,Task> tasks;
+    private Map<Integer,TaskRun> tasks;
     private Date startTs;
     private Date stopTs;
     private String resultId;
@@ -80,11 +79,11 @@ public class Run {
         this.runType = runType;
     }
 
-    public Map<Integer, Task> getTasks() {
+    public Map<Integer, TaskRun> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Map<Integer, Task> tasks) {
+    public void setTasks(Map<Integer, TaskRun> tasks) {
         this.tasks = tasks;
     }
 

@@ -1,7 +1,8 @@
 package net.fordok.service.storage;
 
-import net.fordok.service.dto.Task;
 import net.fordok.service.dto.Run;
+import net.fordok.service.dto.Task;
+import net.fordok.service.dto.TaskRun;
 import net.fordok.service.dto.Type;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class StorageImpl implements Storage {
         typeDelay.setInputParams(inputParamsDelay);
         types.put(typeDelay.getName(), typeDelay);
 
-        Map<Integer,Task> taskMap = new HashMap<>();
+        Map<Integer,TaskRun> taskMap = new HashMap<>();
 
         Task task = new Task("test1");
         task.setTaskId(UUID.randomUUID().toString());
@@ -53,6 +54,25 @@ public class StorageImpl implements Storage {
         task.setOutputData(outputData);
         task.setBody("some body");
 
+        TaskRun taskRun = new TaskRun(task, "sequence", null);
+
+        Task taskScheduler = new Task("test1");
+        taskScheduler.setTaskId(UUID.randomUUID().toString());
+        taskScheduler.setType(type);
+        Map<String,String> paramsScheduler = new HashMap<>();
+        paramsScheduler.put("url", "http://rambler.ru");
+        paramsScheduler.put("method", "GET");
+        taskScheduler.setParams(paramsScheduler);
+        taskScheduler.setInputData(null);
+        taskScheduler.setOutputData(null);
+        taskScheduler.setBody("some body");
+
+        Map<String,String> parameters = new HashMap<>();
+        parameters.put("periodMin", "1000");
+        parameters.put("periodMax", "1000");
+
+        TaskRun taskRunScheduler = new TaskRun(taskScheduler, "scheduler", parameters);
+
         Task taskDelay = new Task("test1");
         taskDelay.setTaskId(UUID.randomUUID().toString());
         taskDelay.setType(typeDelay);
@@ -61,16 +81,20 @@ public class StorageImpl implements Storage {
         paramsDelay.put("delayMax", "1000");
         taskDelay.setParams(paramsDelay);
 
+        TaskRun taskRunDelay = new TaskRun(taskDelay, "sequence", null);
+
         tasks.put(task.getTaskId(), task);
-        taskMap.put(1, task);
+        taskMap.put(1, taskRun);
         tasks.put(taskDelay.getTaskId(), taskDelay);
-        taskMap.put(2, taskDelay);
+        taskMap.put(2, taskRunDelay);
+        tasks.put(taskScheduler.getTaskId(), taskScheduler);
+        taskMap.put(-1, taskRunScheduler);
 
         Run run = new Run();
         run.setRunId(UUID.randomUUID().toString());
         run.setName("Test run");
         run.setInitialCount(1);
-        run.setTotalCount(10);
+        run.setTotalCount(1);
         run.setRampUp(1000);
         run.setStatus("Finished");
         run.setRunId(UUID.randomUUID().toString());

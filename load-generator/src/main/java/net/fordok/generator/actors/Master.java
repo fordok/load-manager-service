@@ -7,14 +7,17 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import net.fordok.generator.messages.CommandsManage;
+import net.fordok.generator.messages.WorkRun;
 import net.fordok.generator.work.Delay;
 import net.fordok.generator.work.Http;
 import net.fordok.generator.work.Work;
 import net.fordok.service.dto.Run;
 import net.fordok.service.dto.Task;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Fordok
@@ -25,12 +28,15 @@ public class Master extends UntypedActor {
 
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
     private List<ActorRef> workers = new ArrayList<>();
-    private Map<Integer,Work> workList = new HashMap<>();
+    private Map<String,Class> taskRunToExecutorMap = new HashMap<>();
+    private Run run = null;
     private ActorRef stats = null;
 
     @Override
     public void preStart() throws Exception {
         stats = getContext().actorOf(Props.create(StatsAggregator.class));
+        taskRunToExecutorMap.put("sequence", WorkerSequence.class);
+        taskRunToExecutorMap.put("scheduler", WorkerScheduler.class);
     }
 
     @Override
@@ -38,17 +44,32 @@ public class Master extends UntypedActor {
         log.info("Received : " + message);
         if (message instanceof CommandsManage) {
             if (message instanceof CommandsManage.Start) {
-                Run run = ((CommandsManage.Start) message).getRun();
+                run = ((CommandsManage.Start) message).getRun();
                 killAndClearWorkers();
-                run.getTasks().forEach((index, task) -> workList.put(index, convertTaskToWork(task)));
-                for (int i = 1; i <= run.getTotalCount(); i++) {
-                    ActorRef worker = getContext().actorOf(Props.create(Worker.class, i, workList, stats));
-                    workers.add(worker);
-                }
+                taskRunToExecutorMap.forEach(this::populateWorkersList);
             }
             if (message instanceof CommandsManage.Stop) {
                 killAndClearWorkers();
             }
+        }
+    }
+
+    private void populateWorkersList(String filterName, Class classIns) {
+        Map<Integer,Work> workList = new HashMap<>();
+        Map<String,String> runParams = new HashMap<>();
+        run.getTasks().entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().getType().equals(filterName))
+                .forEach(entry -> {
+                    if (entry.getValue().getParams() != null) {
+                        runParams.putAll(entry.getValue().getParams());
+                    }
+                    workList.put(entry.getKey(), convertTaskToWork(entry.getValue().getTask()));
+                });
+        log.info("work " + filterName + " list size : " + workList.size());
+        for (int i = 1; i <= run.getTotalCount(); i++) {
+            ActorRef worker = getContext().actorOf(Props.create(classIns, i, new WorkRun(workList, runParams), stats));
+            workers.add(worker);
         }
     }
 
