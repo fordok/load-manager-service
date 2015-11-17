@@ -37,6 +37,7 @@ public class Master extends UntypedActor {
         stats = getContext().actorOf(Props.create(StatsAggregator.class));
         taskRunToExecutorMap.put("sequence", WorkerSequence.class);
         taskRunToExecutorMap.put("scheduler", WorkerScheduler.class);
+        taskRunToExecutorMap.put("random", WorkerRandom.class);
     }
 
     @Override
@@ -67,9 +68,11 @@ public class Master extends UntypedActor {
                     workList.put(entry.getKey(), convertTaskToWork(entry.getValue().getTask()));
                 });
         log.info("work " + filterName + " list size : " + workList.size());
-        for (int i = 1; i <= run.getTotalCount(); i++) {
-            ActorRef worker = getContext().actorOf(Props.create(classIns, i, new WorkRun(workList, runParams), stats));
-            workers.add(worker);
+        if (workList.size() > 0) {
+            for (int i = 1; i <= run.getTotalCount(); i++) {
+                ActorRef worker = getContext().actorOf(Props.create(classIns, i, new WorkRun(workList, runParams), stats));
+                workers.add(worker);
+            }
         }
     }
 

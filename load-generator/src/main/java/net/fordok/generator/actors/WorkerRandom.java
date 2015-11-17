@@ -6,15 +6,14 @@ import net.fordok.generator.messages.WorkResult;
 import net.fordok.generator.messages.WorkRun;
 import net.fordok.generator.work.Work;
 
-/**
- * User: Fordok
- * Date: 1/3/2015
- * Time: 2:50 PM
- */
-public class WorkerSequence extends Worker {
-    private int taskIndex = 1;
+import java.util.Random;
 
-    public WorkerSequence(int id, WorkRun workRun, ActorRef stats) {
+/**
+ * Created by fordok on 11/17/2015.
+ */
+public class WorkerRandom extends Worker {
+
+    public WorkerRandom(int id, WorkRun workRun, ActorRef stats) {
         super(id, workRun, stats);
         doWork(getNextWork());
     }
@@ -29,11 +28,10 @@ public class WorkerSequence extends Worker {
     }
 
     private Work getNextWork() {
-        if (taskIndex == workRun.getWorkList().size()) {
-            taskIndex = 1;
-        } else {
-            taskIndex++;
-        }
+        Random r = new Random();
+        int min = 1;
+        int max = workRun.getWorkList().size() - 1;
+        int taskIndex =  r.nextInt((max - min) + 1) + min;
         return workRun.getWorkList().get(taskIndex);
     }
 }

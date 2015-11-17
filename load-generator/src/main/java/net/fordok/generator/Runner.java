@@ -72,8 +72,8 @@ public class Runner {
         taskScheduler.setBody("some body");
 
         Map<String,String> parameters = new HashMap<>();
-        parameters.put("periodMin", "1000");
-        parameters.put("periodMax", "1000");
+        parameters.put("periodMin", "50");
+        parameters.put("periodMax", "50");
 
         TaskRun taskRunScheduler = new TaskRun(taskScheduler, "scheduler", parameters);
 
@@ -112,7 +112,7 @@ public class Runner {
         LoadGenerator loadGenerator = new LoadGeneratorImpl();
         loadGenerator.init();
         loadGenerator.start(run);
-        Thread.sleep(30000);
+        Thread.sleep(10000);
         loadGenerator.stop();
     }
 }
