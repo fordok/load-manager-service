@@ -1,6 +1,6 @@
 package net.fordok.service.service;
 
-import net.fordok.service.dto.Task;
+import net.fordok.service.dto.TaskRun;
 
 import java.util.Date;
 import java.util.Map;
@@ -14,8 +14,8 @@ public class RunRequest {
     private int initialCount;
     private int totalCount;
     private int rampUp;
-    private String runYype;
-    private Map<Integer,Task> tasks;
+    private String runType;
+    private Map<Integer,TaskRun> tasks;
     private Date startTs;
     private Date stopTs;
 
@@ -54,19 +54,19 @@ public class RunRequest {
         this.rampUp = rampUp;
     }
 
-    public String getRunYype() {
-        return runYype;
+    public String getRunType() {
+        return runType;
     }
 
-    public void setRunYype(String runYype) {
-        this.runYype = runYype;
+    public void setRunType(String runType) {
+        this.runType = runType;
     }
 
-    public Map<Integer, Task> getTasks() {
+    public Map<Integer, TaskRun> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Map<Integer, Task> tasks) {
+    public void setTasks(Map<Integer, TaskRun> tasks) {
         this.tasks = tasks;
     }
 

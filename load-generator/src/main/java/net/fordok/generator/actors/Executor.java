@@ -8,7 +8,7 @@ import net.fordok.generator.work.Work;
  * User: fordok
  * Date: 6/25/2015
  */
-public class WorkerExecutor extends UntypedActor {
+public class Executor extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {

@@ -30,7 +30,7 @@ public class WorkerRandom extends Worker {
     private Work getNextWork() {
         Random r = new Random();
         int min = 1;
-        int max = workRun.getWorkList().size() - 1;
+        int max = workRun.getWorkList().size();
         int taskIndex =  r.nextInt((max - min) + 1) + min;
         return workRun.getWorkList().get(taskIndex);
     }

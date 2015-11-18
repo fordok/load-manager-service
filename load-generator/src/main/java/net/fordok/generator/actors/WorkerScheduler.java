@@ -14,11 +14,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class WorkerScheduler extends Worker {
 
-    private Cancellable scheduler = null;
-
     public WorkerScheduler(int id, WorkRun workRun, ActorRef stats) {
         super(id, workRun, stats);
-        scheduler = initSchedulerWithPeriod(Integer.valueOf(workRun.getRunParams().get("periodMin")));
+        initSchedulerWithPeriod(Integer.valueOf(workRun.getRunParams().get("periodMin")));
     }
 
     @Override

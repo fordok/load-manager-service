@@ -3,9 +3,9 @@ package net.fordok.service.resource;
 import com.codahale.metrics.annotation.Timed;
 import net.fordok.generator.core.LoadGenerator;
 import net.fordok.service.dto.Run;
+import net.fordok.service.service.RunActionResponse;
 import net.fordok.service.service.RunRequest;
 import net.fordok.service.service.RunResponse;
-import net.fordok.service.service.RunActionResponse;
 import net.fordok.service.storage.Storage;
 
 import javax.ws.rs.*;
@@ -48,7 +48,7 @@ public class RunResource {
         run.setInitialCount(request.getInitialCount());
         run.setTotalCount(request.getTotalCount());
         run.setRampUp(request.getRampUp());
-        run.setRunType(request.getRunYype());
+        run.setRunType(request.getRunType());
         run.setTasks(request.getTasks());
         run.setStartTs(request.getStartTs());
         run.setStopTs(request.getStopTs());

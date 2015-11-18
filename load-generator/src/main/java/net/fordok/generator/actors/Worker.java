@@ -31,7 +31,7 @@ public class Worker extends UntypedActor {
     }
 
     protected void doWork(Work work) {
-        ActorRef executor = getContext().actorOf(Props.create(WorkerExecutor.class));
+        ActorRef executor = getContext().actorOf(Props.create(Executor.class));
         if (work == null) {
             log.debug("work is null!!!!");
         } else {
