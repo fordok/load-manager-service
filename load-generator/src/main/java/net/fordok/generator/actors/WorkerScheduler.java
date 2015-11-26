@@ -33,7 +33,7 @@ public class WorkerScheduler extends Worker {
     }
 
     private Cancellable initSchedulerWithPeriod(long period) {
-        return getContext().system().scheduler().schedule(Duration.Zero(),
+        return context().system().scheduler().schedule(Duration.Zero(),
                 Duration.create(period, TimeUnit.MILLISECONDS), getSelf(), "Tick",
                 getContext().system().dispatcher(), null);
     }
