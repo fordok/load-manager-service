@@ -1,9 +1,11 @@
 package net.fordok.generator.messages;
 
+import java.io.Serializable;
+
 /**
  * Created by fordok on 11/26/2015.
  */
-public class ClusterMessage {
+public class ClusterMessage implements Serializable {
     private String content;
 
     public ClusterMessage(String content) {

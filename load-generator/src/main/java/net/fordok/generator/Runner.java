@@ -15,6 +15,7 @@ import java.util.*;
  * Time: 6:13 PM
  */
 public class Runner {
+
     private static Map<String,Task> tasks = new HashMap<>();
     private static Map<String,Type> types = new HashMap<>();
     private static Map<String,Run> runs = new HashMap<>();
@@ -72,8 +73,8 @@ public class Runner {
         taskScheduler.setBody("some body");
 
         Map<String,String> parameters = new HashMap<>();
-        parameters.put("periodMin", "50");
-        parameters.put("periodMax", "50");
+        parameters.put("periodMin", "500");
+        parameters.put("periodMax", "500");
 
         TaskRun taskRunScheduler = new TaskRun(taskScheduler, "scheduler", parameters);
 
@@ -110,7 +111,9 @@ public class Runner {
         runs.put(run.getRunId(), run);
 
         LoadGenerator loadGenerator = new LoadGeneratorImpl();
-        loadGenerator.init();
+        List seeds = new ArrayList<>();
+        seeds.add("127.0.0.1");
+        loadGenerator.init("127.0.0.1", "2551", seeds);
         loadGenerator.start(run);
         Thread.sleep(10000);
         loadGenerator.stop();

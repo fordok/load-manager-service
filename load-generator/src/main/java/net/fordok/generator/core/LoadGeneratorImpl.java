@@ -5,10 +5,14 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValueFactory;
 import net.fordok.generator.actors.ClusterListener;
 import net.fordok.generator.actors.Master;
 import net.fordok.generator.messages.CommandsManage;
 import net.fordok.service.dto.Run;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Fordok
@@ -19,15 +23,23 @@ public class LoadGeneratorImpl implements LoadGenerator {
 
     private ActorSystem actorSystem;
     private ActorRef master;
+    private ActorRef clusterListener;
 
     @Override
-    public void init() {
-        String port = "2551";
-        Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port=" + port).withFallback(
-                ConfigFactory.load());
+    public void init(String host, String port, List<String> seedsIps) {
+        List<String> seeds = new ArrayList<>();
+        seedsIps.forEach(ip -> seeds.add(String.format("akka.tcp://loadGenerator@%s:%s", ip, port)));
+        Config config = ConfigFactory.empty()
+                .withValue("akka.remote.netty.tcp.hostname", ConfigValueFactory.fromAnyRef(host))
+                .withValue("akka.remote.netty.tcp.port", ConfigValueFactory.fromAnyRef(port))
+                .withValue("akka.cluster.seed-nodes", ConfigValueFactory.fromIterable(seeds))
+                .withFallback(ConfigFactory.load());
         actorSystem = ActorSystem.create("loadGenerator", config);
         master = actorSystem.actorOf(Props.create(Master.class));
-        actorSystem.actorOf(Props.create(ClusterListener.class));
+        clusterListener = actorSystem.actorOf(Props.create(ClusterListener.class));
+//        actorSystem.scheduler().schedule(Duration.Zero(),
+//                Duration.create(1000, TimeUnit.MILLISECONDS), clusterListener, new ClusterMessage("test"),
+//                actorSystem.dispatcher(), null);
     }
 
     @Override

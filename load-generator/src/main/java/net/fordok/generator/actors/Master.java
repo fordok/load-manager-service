@@ -35,7 +35,7 @@ public class Master extends UntypedActor {
     @Override
     public void preStart() throws Exception {
         stats = getContext().actorOf(Props.create(StatsAggregator.class));
-        taskRunToExecutorMap.put("sequence", WorkerSequence.class);
+//        taskRunToExecutorMap.put("sequence", WorkerSequence.class);
         taskRunToExecutorMap.put("scheduler", WorkerScheduler.class);
         taskRunToExecutorMap.put("random", WorkerRandom.class);
     }

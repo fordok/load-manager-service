@@ -12,6 +12,9 @@
         <module>commons</module>
         <module>load-generator</module>
         <module>load-service</module>
+        <module>load-aws</module>
+        <module>load-node</module>
+        <module>load-cloud</module>
     </modules>
 
     <properties>
