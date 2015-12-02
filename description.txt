@@ -1,4 +1,4 @@
-API:
+Load manager API:
 
 +types/							            GET/POST
 +types/{typeName}					  GET/PUT/DELETE
@@ -7,12 +7,18 @@ API:
 runs								  GET/POST
 runs/{runId}					  GET/PUT/DELETE
 runs/{runId}/copy				  PUT
-runs/{runId}/start			  PUT
-runs/{runId}/stop				  PUT
+runs/{runId}/start			  	  GET
+runs/{runId}/stop				  GET
 runs/{runId}/results
 runs/{runId}/results/{resultId}
 machines							              GET/POST
 machines/{machines-id}						  GET/PUT/DELETE
+
+Load generator API:
+
+{runId}						GET/POST
+{runId}/start					GET
+{runId}/stop					GET
 
 
 Types:
