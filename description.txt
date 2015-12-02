@@ -6,19 +6,23 @@ Load manager API:
 +tasks/{taskId}							        GET/PUT/DELETE
 runs								  GET/POST
 runs/{runId}					  GET/PUT/DELETE
-runs/{runId}/copy				  PUT
+runs/{runId}/copy				  GET
 runs/{runId}/start			  	  GET
 runs/{runId}/stop				  GET
-runs/{runId}/results
-runs/{runId}/results/{resultId}
-machines							              GET/POST
+runs/{runId}/results			          GET
+runs/{runId}/results/{resultId}			  GET
+instances					  GET
+instances/launch?count={count}			  GET
+instances/terminate				  GET
+instances/{instanceId}/terminate		  GET
+machines							              GET
 machines/{machines-id}						  GET/PUT/DELETE
 
 Load generator API:
 
-{runId}						GET/POST
-{runId}/start					GET
-{runId}/stop					GET
+generator/start					POST
+generator/stop					GET
+generator/state					GET
 
 
 Types:
