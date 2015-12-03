@@ -10,6 +10,7 @@ import java.util.List;
 public interface CloudManager {
     void init(String endpoint);
     List<Instance> launchInstances(int count);
+    List<Instance> getAllInstancesInfo();
     void terminateInstance(String instanceId);
     void terminateAllInstances();
 }

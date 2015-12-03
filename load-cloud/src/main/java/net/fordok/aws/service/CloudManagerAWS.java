@@ -59,6 +59,17 @@ public class CloudManagerAWS implements CloudManager {
     }
 
     @Override
+    public List<Instance> getAllInstancesInfo() {
+        DescribeInstancesResult describeInstancesResult = ec2.describeInstances();
+        List<Reservation> reservations = describeInstancesResult.getReservations();
+        List<Instance> instances = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            instances.addAll(reservation.getInstances());
+        }
+        return instances;
+    }
+
+    @Override
     public void terminateInstance(String instanceId) {
         ArrayList<String> instanceIds = new ArrayList<>();
         instanceIds.add(instanceId);
