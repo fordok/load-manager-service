@@ -39,7 +39,7 @@ public class CloudManagerAWS implements CloudManager {
     public List<Instance> launchInstances(int count) {
         try {
             RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
-            runInstancesRequest.withImageId("ami-6053f613")
+            runInstancesRequest.withImageId("ami-e055f393")
                     .withInstanceType("t1.micro")
                     .withMinCount(count)
                     .withMaxCount(count)
