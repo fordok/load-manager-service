@@ -4,7 +4,12 @@ import com.codahale.metrics.annotation.Timed;
 import net.fordok.generator.core.LoadGenerator;
 import net.fordok.node.service.GeneralResponse;
 import net.fordok.node.service.InitRequest;
+import net.fordok.node.service.StateResponse;
 import net.fordok.service.dto.Run;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 public class GeneratorResource {
 
     private final LoadGenerator loadGenerator;
+    private static final DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
 
     public GeneratorResource(LoadGenerator loadGenerator) {
         this.loadGenerator = loadGenerator;
@@ -45,5 +51,11 @@ public class GeneratorResource {
     public GeneralResponse stop() {
         loadGenerator.stop();
         return new GeneralResponse("success");
+    }
+
+    @GET
+    @Path("/state")
+    public StateResponse status() {
+        return new StateResponse(loadGenerator.getState(), formatter.print(new DateTime().withZone(DateTimeZone.UTC)));
     }
 }
