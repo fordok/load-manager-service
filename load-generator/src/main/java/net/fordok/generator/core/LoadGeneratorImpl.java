@@ -21,9 +21,15 @@ import java.util.List;
  */
 public class LoadGeneratorImpl implements LoadGenerator {
 
+    public static final String STATE_NEW = "new";
+    public static final String STATE_INITIALIZED = "initialized";
+    public static final String STATE_RUNNING = "running";
+    public static final String STATE_STOPPED = "stopped";
+
     private ActorSystem actorSystem;
     private ActorRef master;
     private ActorRef clusterListener;
+    private String state = STATE_NEW;
 
     @Override
     public void init(String host, String port, List<String> seedsIps) {
@@ -37,18 +43,23 @@ public class LoadGeneratorImpl implements LoadGenerator {
         actorSystem = ActorSystem.create("loadGenerator", config);
         master = actorSystem.actorOf(Props.create(Master.class));
         clusterListener = actorSystem.actorOf(Props.create(ClusterListener.class));
-//        actorSystem.scheduler().schedule(Duration.Zero(),
-//                Duration.create(1000, TimeUnit.MILLISECONDS), clusterListener, new ClusterMessage("test"),
-//                actorSystem.dispatcher(), null);
+        state = STATE_INITIALIZED;
     }
 
     @Override
     public void start(Run run) {
         master.tell(new CommandsManage.Start(run), ActorRef.noSender());
+        state = STATE_RUNNING;
     }
 
     @Override
     public void stop() {
         master.tell(new CommandsManage.Stop(), ActorRef.noSender());
+        state = STATE_STOPPED;
+    }
+
+    @Override
+    public String getState() {
+        return state;
     }
 }

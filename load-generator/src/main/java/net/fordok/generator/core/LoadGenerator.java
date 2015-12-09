@@ -13,4 +13,5 @@ public interface LoadGenerator {
     void init(String host, String port, List<String> seeds);
     void start(Run run);
     void stop();
+    String getState();
 }
