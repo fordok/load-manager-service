@@ -13,4 +13,5 @@ public interface CloudManager {
     List<Instance> getAllInstancesInfo();
     void terminateInstance(String instanceId);
     void terminateAllInstances();
+    void executeCommandForInstance(String command, String publicIp);
 }

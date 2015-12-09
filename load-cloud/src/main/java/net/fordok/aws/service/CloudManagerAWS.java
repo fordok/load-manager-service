@@ -6,7 +6,12 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.*;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +44,7 @@ public class CloudManagerAWS implements CloudManager {
     public List<Instance> launchInstances(int count) {
         try {
             RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
-            runInstancesRequest.withImageId("ami-e055f393")
+            runInstancesRequest.withImageId("ami-e65dfc95")
                     .withInstanceType("t1.micro")
                     .withMinCount(count)
                     .withMaxCount(count)
@@ -110,6 +115,29 @@ public class CloudManagerAWS implements CloudManager {
             System.out.println("Response Status Code: " + e.getStatusCode());
             System.out.println("Error Code: " + e.getErrorCode());
             System.out.println("Request ID: " + e.getRequestId());
+        }
+    }
+
+    @Override
+    public void executeCommandForInstance(String command, String publicIp) {
+        JSch jsch = new JSch();
+        try {
+            jsch.addIdentity("D:///amazon.pem");
+            jsch.setConfig("StrictHostKeyChecking", "no");
+            Session session=jsch.getSession("ec2-user", publicIp, 22);
+            session.connect();
+            ChannelExec channel = (ChannelExec)session.openChannel("exec");
+            BufferedReader in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+            channel.setCommand(command);
+            channel.connect();
+            String msg = null;
+            while((msg = in.readLine()) != null){
+                System.out.println(msg);
+            }
+            channel.disconnect();
+            session.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
