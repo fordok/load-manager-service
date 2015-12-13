@@ -11,6 +11,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,7 +45,7 @@ public class CloudManagerAWS implements CloudManager {
     public List<Instance> launchInstances(int count) {
         try {
             RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
-            runInstancesRequest.withImageId("ami-e65dfc95")
+            runInstancesRequest.withImageId("ami-d9a505aa")
                     .withInstanceType("t1.micro")
                     .withMinCount(count)
                     .withMaxCount(count)
@@ -122,9 +123,10 @@ public class CloudManagerAWS implements CloudManager {
     public void executeCommandForInstance(String command, String publicIp) {
         JSch jsch = new JSch();
         try {
-            jsch.addIdentity("D:///amazon.pem");
+            File keyFile = new File( this.getClass().getResource("/amazon.pem").toURI());
+            jsch.addIdentity(keyFile.getAbsolutePath());
             jsch.setConfig("StrictHostKeyChecking", "no");
-            Session session=jsch.getSession("ec2-user", publicIp, 22);
+            Session session = jsch.getSession("ec2-user", publicIp, 22);
             session.connect();
             ChannelExec channel = (ChannelExec)session.openChannel("exec");
             BufferedReader in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
