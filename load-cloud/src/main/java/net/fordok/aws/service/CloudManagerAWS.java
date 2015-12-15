@@ -120,7 +120,7 @@ public class CloudManagerAWS implements CloudManager {
     }
 
     @Override
-    public void executeCommandForInstance(String command, String publicIp) {
+    public void executeCommandForInstance(String command, String publicIp, boolean printResult) {
         JSch jsch = new JSch();
         try {
             File keyFile = new File( this.getClass().getResource("/amazon.pem").toURI());
@@ -133,8 +133,10 @@ public class CloudManagerAWS implements CloudManager {
             channel.setCommand(command);
             channel.connect();
             String msg = null;
-            while((msg = in.readLine()) != null){
-                System.out.println(msg);
+            if (printResult) {
+                while((msg = in.readLine()) != null){
+                    System.out.println(msg);
+                }
             }
             channel.disconnect();
             session.disconnect();
