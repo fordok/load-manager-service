@@ -3,6 +3,7 @@ package net.fordok.service.resource;
 import com.amazonaws.services.ec2.model.Instance;
 import com.codahale.metrics.annotation.Timed;
 import net.fordok.aws.service.CloudManager;
+import net.fordok.service.service.CommandRequest;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -42,5 +43,18 @@ public class CloudResource {
     @Path("{instanceId}/terminate")
     public void terminateByInstanceId(@PathParam("instanceId") String instanceId) {
         cloudManager.terminateInstance(instanceId);
+    }
+
+    @GET
+    @Path("{instanceId}/start")
+    public void startGeneratorServiceForInstanceId(@PathParam("instanceId") String instanceId) {
+        String startNodeService = "bash start.sh";
+        cloudManager.executeCommandForInstance(startNodeService, instanceId, false);
+    }
+
+    @POST
+    @Path("{instanceId}/exec/")
+    public void executeCommandForInstanceId(@PathParam("instanceId") String instanceId, CommandRequest command) {
+        cloudManager.executeCommandForInstance(command.getBody(), instanceId, command.isPrintResult());
     }
 }
