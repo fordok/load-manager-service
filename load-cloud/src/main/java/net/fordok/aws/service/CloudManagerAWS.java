@@ -23,7 +23,8 @@ import java.util.Set;
  */
 public class CloudManagerAWS implements CloudManager {
 
-    AmazonEC2Client ec2 = null;
+    private AmazonEC2Client ec2 = null;
+    private static final String RUNNING_STATE = "running";
 
     @Override
     public void init(String endpoint) {
@@ -142,6 +143,18 @@ public class CloudManagerAWS implements CloudManager {
             session.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void executeCommandForInstances(String command) {
+        DescribeInstancesResult describeInstancesResult = ec2.describeInstances();
+        List<Reservation> reservations = describeInstancesResult.getReservations();
+        for (Reservation reservation : reservations) {
+            reservation.getInstances()
+                    .stream()
+                    .filter(instance -> instance.getState().getName().equals(RUNNING_STATE))
+                    .forEach(instance1 -> executeCommandForInstance(command, instance1.getPublicIpAddress(), false));
         }
     }
 }
