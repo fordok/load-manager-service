@@ -46,10 +46,23 @@ public class CloudResource {
     }
 
     @GET
+    @Path("start")
+    public void startGeneratorServiceForInstances() {
+        String startNodeServiceCmd = "bash start.sh";
+        cloudManager.executeCommandForInstances(startNodeServiceCmd);
+    }
+
+    @GET
+    @Path("exec")
+    public void executeCommandForInstances(CommandRequest command) {
+        cloudManager.executeCommandForInstances(command.getBody());
+    }
+
+    @GET
     @Path("{instanceId}/start")
     public void startGeneratorServiceForInstanceId(@PathParam("instanceId") String instanceId) {
-        String startNodeService = "bash start.sh";
-        cloudManager.executeCommandForInstance(startNodeService, instanceId, false);
+        String startNodeServiceCmd = "bash start.sh";
+        cloudManager.executeCommandForInstance(startNodeServiceCmd, instanceId, false);
     }
 
     @POST
