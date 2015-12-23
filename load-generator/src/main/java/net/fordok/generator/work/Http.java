@@ -19,15 +19,17 @@ public class Http implements Work {
 
     private static Logger log = LoggerFactory.getLogger(Http.class);
 
+    private final String id;
     private final Map<String,String> params;
 
-    public Http(Map<String,String> inputParams) {
+    public Http(String id, Map<String,String> inputParams) {
+        this.id = id;
         this.params = inputParams;
     }
 
     @Override
     public WorkResult doWork() {
-        WorkResult result = new WorkResult(this.getClass().getSimpleName());
+        WorkResult result = new WorkResult(id, this.getClass().getSimpleName());
         try {
             result.setStartTs(System.currentTimeMillis());
             URL obj = new URL(params.get("url"));

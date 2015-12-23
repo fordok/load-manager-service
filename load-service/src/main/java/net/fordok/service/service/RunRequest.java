@@ -3,7 +3,7 @@ package net.fordok.service.service;
 import net.fordok.service.dto.TaskRun;
 
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by fordok on 11/7/2015.
@@ -15,7 +15,7 @@ public class RunRequest {
     private int totalCount;
     private int rampUp;
     private String runType;
-    private Map<Integer,TaskRun> tasks;
+    private List<TaskRun> tasks;
     private Date startTs;
     private Date stopTs;
 
@@ -62,11 +62,11 @@ public class RunRequest {
         this.runType = runType;
     }
 
-    public Map<Integer, TaskRun> getTasks() {
+    public List<TaskRun> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Map<Integer, TaskRun> tasks) {
+    public void setTasks(List<TaskRun> tasks) {
         this.tasks = tasks;
     }
 

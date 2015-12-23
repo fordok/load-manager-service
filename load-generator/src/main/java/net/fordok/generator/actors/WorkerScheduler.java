@@ -28,7 +28,7 @@ public class WorkerScheduler extends Worker {
             }
         } else if (message.equals("Tick")) {
             //todo make complicated get
-            doWork(workRun.getWorkList().values().iterator().next());
+            doWork(workRun.getWorkList().iterator().next());
         }
     }
 

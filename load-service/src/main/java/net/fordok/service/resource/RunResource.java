@@ -48,7 +48,6 @@ public class RunResource {
         run.setInitialCount(request.getInitialCount());
         run.setTotalCount(request.getTotalCount());
         run.setRampUp(request.getRampUp());
-        run.setRunType(request.getRunType());
         run.setTasks(request.getTasks());
         run.setStartTs(request.getStartTs());
         run.setStopTs(request.getStopTs());

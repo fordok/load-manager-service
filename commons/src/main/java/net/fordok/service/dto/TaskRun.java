@@ -1,23 +1,29 @@
 package net.fordok.service.dto;
 
-import java.util.Map;
-
 /**
  * Created by fordok on 11/15/2015.
  */
 public class TaskRun {
 
+    private String taskRunId;
     private Task task;
-    private String type;
-    private Map<String,String> params;
+    private RunParams runParams;
 
     public TaskRun() {
     }
 
-    public TaskRun(Task task, String type, Map<String, String> params) {
+    public TaskRun(String taskRunId, Task task, RunParams runParams) {
+        this.taskRunId = taskRunId;
         this.task = task;
-        this.type = type;
-        this.params = params;
+        this.runParams = runParams;
+    }
+
+    public String getTaskRunId() {
+        return taskRunId;
+    }
+
+    public void setTaskRunId(String taskRunId) {
+        this.taskRunId = taskRunId;
     }
 
     public Task getTask() {
@@ -28,19 +34,11 @@ public class TaskRun {
         this.task = task;
     }
 
-    public String getType() {
-        return type;
+    public RunParams getRunParams() {
+        return runParams;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Map<String, String> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
+    public void setRunParams(RunParams runParams) {
+        this.runParams = runParams;
     }
 }

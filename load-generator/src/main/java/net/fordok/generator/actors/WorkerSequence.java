@@ -29,8 +29,8 @@ public class WorkerSequence extends Worker {
     }
 
     private Work getNextWork() {
-        if (taskIndex == workRun.getWorkList().size()) {
-            taskIndex = 1;
+        if (taskIndex == workRun.getWorkList().size() - 1) {
+            taskIndex = 0;
         } else {
             taskIndex++;
         }

@@ -22,7 +22,7 @@ public class Delay implements Work {
 
     @Override
     public WorkResult doWork() {
-        WorkResult result = new WorkResult(this.getClass().getSimpleName());
+        WorkResult result = new WorkResult(this.getClass().getSimpleName(), this.getClass().getSimpleName());
         result.setStartTs(System.currentTimeMillis());
         int delayMin = Integer.parseInt(params.get("delayMin"));
         int delayMax = Integer.parseInt(params.get("delayMax"));

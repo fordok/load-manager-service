@@ -2,8 +2,10 @@ package net.fordok.service.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import net.fordok.service.dto.Task;
-import net.fordok.service.service.*;
+import net.fordok.service.service.TaskRequest;
+import net.fordok.service.service.TaskResponse;
 import net.fordok.service.storage.Storage;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -40,7 +42,7 @@ public class TaskResource {
         Task task = new Task();
         task.setName(taskRequest.getName());
         task.setParams(taskRequest.getParams());
-        task.setType(taskRequest.getType());
+        task.setType(taskRequest.getType().getName());
         task.setInputData(taskRequest.getInputData());
         task.setOutputData(taskRequest.getOutputData());
         task = storage.saveTask(task);

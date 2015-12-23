@@ -2,10 +2,7 @@ package net.fordok.generator;
 
 import net.fordok.generator.core.LoadGenerator;
 import net.fordok.generator.core.LoadGeneratorImpl;
-import net.fordok.service.dto.Run;
-import net.fordok.service.dto.Task;
-import net.fordok.service.dto.TaskRun;
-import net.fordok.service.dto.Type;
+import net.fordok.service.dto.*;
 
 import java.util.*;
 
@@ -19,6 +16,7 @@ public class Runner {
     private static Map<String,Task> tasks = new HashMap<>();
     private static Map<String,Type> types = new HashMap<>();
     private static Map<String,Run> runs = new HashMap<>();
+    private static List<TaskRun> taskRuns = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -45,7 +43,7 @@ public class Runner {
 
         Task task = new Task("test1");
         task.setTaskId(UUID.randomUUID().toString());
-        task.setType(type);
+        task.setType(type.getName());
         Map<String,String> params = new HashMap<>();
         params.put("url", "http://google.com");
         params.put("method", "GET");
@@ -59,11 +57,12 @@ public class Runner {
         task.setOutputData(outputData);
         task.setBody("some body");
 
-        TaskRun taskRun = new TaskRun(task, "sequence", null);
+        RunParams runParamsSequenceOne = new RunParams("sequence", null);
+        TaskRun taskRun = new TaskRun(UUID.randomUUID().toString(), task, runParamsSequenceOne);
 
         Task taskScheduler = new Task("test1");
         taskScheduler.setTaskId(UUID.randomUUID().toString());
-        taskScheduler.setType(type);
+        taskScheduler.setType(type.getName());
         Map<String,String> paramsScheduler = new HashMap<>();
         paramsScheduler.put("url", "http://rambler.ru");
         paramsScheduler.put("method", "GET");
@@ -76,24 +75,26 @@ public class Runner {
         parameters.put("periodMin", "500");
         parameters.put("periodMax", "500");
 
-        TaskRun taskRunScheduler = new TaskRun(taskScheduler, "scheduler", parameters);
+        RunParams runParams = new RunParams("scheduler", parameters);
+        TaskRun taskRunScheduler = new TaskRun(UUID.randomUUID().toString(), taskScheduler, runParams);
 
         Task taskDelay = new Task("test1");
         taskDelay.setTaskId(UUID.randomUUID().toString());
-        taskDelay.setType(typeDelay);
+        taskDelay.setType(typeDelay.getName());
         Map<String,String> paramsDelay = new HashMap<>();
         paramsDelay.put("delayMin", "1000");
         paramsDelay.put("delayMax", "1000");
         taskDelay.setParams(paramsDelay);
 
-        TaskRun taskRunDelay = new TaskRun(taskDelay, "sequence", null);
+        RunParams runParamsSequence = new RunParams("sequence", null);
+        TaskRun taskRunDelay = new TaskRun(UUID.randomUUID().toString(), taskDelay, runParamsSequence);
 
         tasks.put(task.getTaskId(), task);
-        taskMap.put(1, taskRun);
-        tasks.put(taskDelay.getTaskId(), task);
-        taskMap.put(2, taskRunDelay);
-        tasks.put(taskScheduler.getTaskId(), task);
-        taskMap.put(-1, taskRunScheduler);
+        taskRuns.add(taskRun);
+        tasks.put(taskDelay.getTaskId(), taskDelay);
+        taskRuns.add(taskRunDelay);
+        tasks.put(taskScheduler.getTaskId(), taskScheduler);
+        taskRuns.add(taskRunScheduler);
 
         Run run = new Run();
         run.setRunId(UUID.randomUUID().toString());
@@ -105,9 +106,8 @@ public class Runner {
         run.setRunId(UUID.randomUUID().toString());
         run.setStartTs(new Date());
         run.setStopTs(new Date());
-        run.setTasks(taskMap);
+        run.setTasks(taskRuns);
         run.setResultId(UUID.randomUUID().toString());
-        run.setRunType("sequence");
         runs.put(run.getRunId(), run);
 
         LoadGenerator loadGenerator = new LoadGeneratorImpl();

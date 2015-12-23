@@ -11,6 +11,7 @@ public class WorkResult implements Serializable {
 
     private static final long serialVersionUID = -5432699993270746409L;
 
+    private String id;
     private String name;
     private long startTs;
     private long endTs;
@@ -19,8 +20,17 @@ public class WorkResult implements Serializable {
 
     public WorkResult(){}
 
-    public WorkResult(String name) {
+    public WorkResult(String id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -66,7 +76,8 @@ public class WorkResult implements Serializable {
     @Override
     public String toString() {
         return "WorkResult{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", error='" + error + '\'' +
                 ", output=" + output +
                 '}';

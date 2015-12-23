@@ -56,16 +56,16 @@ public class Master extends UntypedActor {
     }
 
     private void populateWorkersList(String filterName, Class classIns) {
-        Map<Integer,Work> workList = new HashMap<>();
+        List<Work> workList = new ArrayList<>();
         Map<String,String> runParams = new HashMap<>();
-        run.getTasks().entrySet()
+        run.getTasks()
                 .stream()
-                .filter(entry -> entry.getValue().getType().equals(filterName))
-                .forEach(entry -> {
-                    if (entry.getValue().getParams() != null) {
-                        runParams.putAll(entry.getValue().getParams());
+                .filter(taskRun -> taskRun.getRunParams().getType().equals(filterName))
+                .forEach(taskRun -> {
+                    if (taskRun.getRunParams().getParams() != null) {
+                        runParams.putAll(taskRun.getRunParams().getParams());
                     }
-                    workList.put(entry.getKey(), convertTaskToWork(entry.getValue().getTask()));
+                    workList.add(convertTaskToWork(taskRun.getTask()));
                 });
         log.info("work " + filterName + " list size : " + workList.size());
         if (workList.size() > 0) {
@@ -77,9 +77,9 @@ public class Master extends UntypedActor {
     }
 
     private Work convertTaskToWork(Task task) {
-        if (task.getType().getName().equals("Http")) {
-            return new Http(task.getParams());
-        } else if (task.getType().getName().equals("Delay")) {
+        if (task.getType().equals("Http")) {
+            return new Http(task.getTaskId(), task.getParams());
+        } else if (task.getType().equals("Delay")) {
             return new Delay(task.getParams());
         } else {
             return null;
