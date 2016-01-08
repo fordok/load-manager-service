@@ -20,6 +20,7 @@ machines/{machines-id}						  GET/PUT/DELETE
 
 Load generator API:
 
+generator/init					POST
 generator/start					POST
 generator/stop					GET
 generator/state					GET
