@@ -7,3 +7,15 @@ server:
         port: 8081
   rootPath: /api/*
   applicationContextPath: /
+logging:
+  level: INFO
+  appenders:
+    - type: file
+      currentLogFilename: logs/load_node.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: logs/load_node-%d.log
+      archivedFileCount: 5
+      timeZone: UTC
+    - type: console
+      threshold: ALL
