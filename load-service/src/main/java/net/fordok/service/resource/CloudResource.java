@@ -4,6 +4,7 @@ import com.amazonaws.services.ec2.model.Instance;
 import com.codahale.metrics.annotation.Timed;
 import net.fordok.aws.service.CloudManager;
 import net.fordok.service.service.CommandRequest;
+import net.fordok.service.service.GeneralResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -35,39 +36,45 @@ public class CloudResource {
 
     @GET
     @Path("terminate")
-    public void terminateAllInstances() {
+    public GeneralResponse terminateAllInstances() {
         cloudManager.terminateAllInstances();
+        return new GeneralResponse("success");
     }
 
     @GET
     @Path("{instanceId}/terminate")
-    public void terminateByInstanceId(@PathParam("instanceId") String instanceId) {
+    public GeneralResponse terminateByInstanceId(@PathParam("instanceId") String instanceId) {
         cloudManager.terminateInstance(instanceId);
+        return new GeneralResponse("success");
     }
 
     @GET
     @Path("start")
-    public void startGeneratorServiceForInstances() {
+    public GeneralResponse startGeneratorServiceForInstances() {
         String startNodeServiceCmd = "bash start.sh";
         cloudManager.executeCommandForInstances(startNodeServiceCmd);
+        return new GeneralResponse("success");
     }
 
-    @GET
+    @POST
     @Path("exec")
-    public void executeCommandForInstances(CommandRequest command) {
+    public GeneralResponse executeCommandForInstances(CommandRequest command) {
         cloudManager.executeCommandForInstances(command.getBody());
+        return new GeneralResponse("success");
     }
 
     @GET
     @Path("{instanceId}/start")
-    public void startGeneratorServiceForInstanceId(@PathParam("instanceId") String instanceId) {
+    public GeneralResponse startGeneratorServiceForInstanceId(@PathParam("instanceId") String instanceId) {
         String startNodeServiceCmd = "bash start.sh";
         cloudManager.executeCommandForInstance(startNodeServiceCmd, instanceId, false);
+        return new GeneralResponse("success");
     }
 
     @POST
     @Path("{instanceId}/exec/")
-    public void executeCommandForInstanceId(@PathParam("instanceId") String instanceId, CommandRequest command) {
+    public GeneralResponse executeCommandForInstanceId(@PathParam("instanceId") String instanceId, CommandRequest command) {
         cloudManager.executeCommandForInstance(command.getBody(), instanceId, command.isPrintResult());
+        return new GeneralResponse("success");
     }
 }
